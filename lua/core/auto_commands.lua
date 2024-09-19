@@ -8,7 +8,7 @@ local autocmd = vim.api.nvim_create_autocmd
 
 local kitty_cmd = "kitty"
 if (vim.env.CONTAINER_ID ~= nil) then
-  kitty_cmd = "distrobox-host-exec" .. kitty_cmd
+  kitty_cmd = "distrobox-host-exec " .. kitty_cmd
 end
 
 -- remove kitty padding when neovim lauch/resume

@@ -21,19 +21,22 @@ map('n', '<c-left>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease Window Wi
 map('n', '<c-right>', '<cmd>vertical resize +2<cr>', { desc = 'Increase Window Width' })
 
 -- move lines
-map('n', '<A-j>', '<cmd>m .+1<cr>==', { desc = 'Move Line Down' })
-map('i', '<A-j>', '<esc><cmd>m .+1<cr>==gi', { desc = 'Move Line Down' })
-map('v', '<A-j>', ":m '>+1<cr>gv=gv", { desc = 'Move Line Down' })
+map('n', '<a-j>', '<cmd>m .+1<cr>==', { desc = 'Move Line Down' })
+map('i', '<a-j>', '<esc><cmd>m .+1<cr>==gi', { desc = 'Move Line Down' })
+map('v', '<a-j>', ":m '>+1<cr>gv=gv", { desc = 'Move Line Down' })
 
-map('n', '<A-k>', '<cmd>m .-2<cr>==', { desc = 'Move Line Up' })
-map('i', '<A-k>', '<esc><cmd>m .-2<cr>==gi', { desc = 'Move Line Up' })
-map('v', '<A-k>', ":m '<-2<cr>gv=gv", { desc = 'Move Line Down' })
+map('n', '<a-k>', '<cmd>m .-2<cr>==', { desc = 'Move Line Up' })
+map('i', '<a-k>', '<esc><cmd>m .-2<cr>==gi', { desc = 'Move Line Up' })
+map('v', '<a-k>', ":m '<-2<cr>gv=gv", { desc = 'Move Line Down' })
 
 -- clear search with <esc>
 map({ 'n', 'i' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and Clear Hightlight Search' })
 
 -- Clear search, diff update and redraw
 map('n', '<leader>ur', '<cmd>nohlsearch<Bar>diffupdate<Bar>normal! <c-L><cr>', { desc = 'Redraw' })
+
+-- disable annoying 'q:' key
+map('n', 'q:', '<nop')
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 map('n', 'n', "'Nn'[v:searchforward].'zv'", { desc = 'Next Search Result', expr = true })
@@ -52,7 +55,6 @@ map('i', '/', '/<c-g>u')
 
 -- file saving
 map({ 'n', 'i', 'x', 's' }, '<c-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
-map({ 'n', 'i', 'x', 's' }, '<leader>s', '<cmd>w<cr><esc>', { desc = 'Save file' })
 
 -- new file
 map('n', '<leader>n', '<cmd>enew<cr>', { desc = 'New File' })
@@ -65,7 +67,7 @@ map('v', '<s-tab>', '<gv')
 
 -- comment
 map('n', 'gco', 'o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Bellow' })
-map('n', 'gcO', 'o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Above' })
+map('n', 'gcO', 'O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Above' })
 
 -- quit
 map('n', '<leader>q', '<cmd>confirm q<cr>', { desc = 'Quit' })

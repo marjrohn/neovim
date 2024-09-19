@@ -98,6 +98,9 @@ opt.splitbelow = true
 opt.splitkeep = 'screen'
 opt.splitright = true
 
+-- disable swap file
+opt.swapfile = false
+
 -- number of space that <tab> count
 opt.tabstop = 2
 
