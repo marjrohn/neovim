@@ -9,9 +9,6 @@ return {
     end,
   },
 
-  -- raibow parentheses
-  { 'HiPhish/rainbow-delimiters.nvim', depedencies = 'nvim-treesitter/nvim-treesitter' },
-
   { -- treesitter
     'nvim-treesitter/nvim-treesitter',
     version = false,
@@ -21,6 +18,9 @@ return {
     end,
   },
   { 'nvim-treesitter/nvim-treesitter-textobjects', dependencies = 'nvim-treesitter/nvim-treesitter' },
+
+  -- raibow parentheses
+  { 'HiPhish/rainbow-delimiters.nvim', depedencies = 'nvim-treesitter/nvim-treesitter' },
 
   { -- statusline
     'nvim-lualine/lualine.nvim',
@@ -42,4 +42,10 @@ return {
       require('configure.tabby')
     end,
   },
+
+  -- buffers per tab
+  { "tiagovla/scope.nvim", config = true },
+
+  -- show marks in sign column
+  { "chentoast/marks.nvim", event = "VeryLazy", config = true },
 }
