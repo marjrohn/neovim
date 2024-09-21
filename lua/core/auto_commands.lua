@@ -1,65 +1,65 @@
 -- [[ General Auto Commands]]
 
-local augroup = function(name) 
+local augroup = function(name)
   return vim.api.nvim_create_augroup(name, { clear = true })
 end
 
 local autocmd = vim.api.nvim_create_autocmd
 
-local kitty_cmd = "kitty"
-if (vim.env.CONTAINER_ID ~= nil) then
-  kitty_cmd = "distrobox-host-exec " .. kitty_cmd
+local kitty_cmd = 'kitty'
+if vim.env.CONTAINER_ID ~= nil then
+  kitty_cmd = 'distrobox-host-exec ' .. kitty_cmd
 end
 
 -- remove kitty padding when neovim lauch/resume
-autocmd({ "VimEnter", "VimResume" }, {
-  group = augroup("kitty_padding_disable"),
+autocmd({ 'VimEnter', 'VimResume' }, {
+  group = augroup('kitty_padding_disable'),
   callback = function()
-    vim.cmd("silent !" .. kitty_cmd .. " @ --to=$KITTY_LISTEN_ON set-spacing padding=0")
+    vim.cmd('silent !' .. kitty_cmd .. ' @ --to=$KITTY_LISTEN_ON set-spacing padding=0')
   end,
 })
 
 -- restore kitty padding when leaving/suspending
-autocmd({ "VimLeave", "VimSuspend" }, {
-  group = augroup("kitty_padding_enable"),
-  callback = function() 
-    vim.cmd("silent !" .. kitty_cmd .. " @ --to=$KITTY_LISTEN_ON set-spacing padding=default")
+autocmd({ 'VimLeave', 'VimSuspend' }, {
+  group = augroup('kitty_padding_enable'),
+  callback = function()
+    vim.cmd('silent !' .. kitty_cmd .. ' @ --to=$KITTY_LISTEN_ON set-spacing padding=default')
   end,
 })
 
 -- Check if we need to reload the file when it changed
-autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-  group = augroup("checktime"),
+autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
+  group = augroup('checktime'),
   callback = function()
-    if vim.o.buftype ~= "nofile" then
-      vim.cmd("checktime")
+    if vim.o.buftype ~= 'nofile' then
+      vim.cmd('checktime')
     end
   end,
 })
 
 -- Highlight on yank
-autocmd("TextYankPost", {
-  group = augroup("highlight_yank"),
+autocmd('TextYankPost', {
+  group = augroup('highlight_yank'),
   callback = function()
     vim.highlight.on_yank()
   end,
 })
 
 -- resize splits if window got resized
-autocmd({ "VimResized" }, {
-  group = augroup("resize_splits"),
+autocmd({ 'VimResized' }, {
+  group = augroup('resize_splits'),
   callback = function()
     local current_tab = vim.fn.tabpagenr()
-    vim.cmd("tabdo wincmd =")
-    vim.cmd("tabnext " .. current_tab)
+    vim.cmd('tabdo wincmd =')
+    vim.cmd('tabnext ' .. current_tab)
   end,
 })
 
 -- go to last loc when opening a buffer
-autocmd("BufReadPost", {
-  group = augroup("last_loc"),
+autocmd('BufReadPost', {
+  group = augroup('last_loc'),
   callback = function(event)
-    local exclude = { "gitcommit" }
+    local exclude = { 'gitcommit' }
     local buf = event.buf
     if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].lazyvim_last_loc then
       return
@@ -74,48 +74,48 @@ autocmd("BufReadPost", {
 })
 
 -- close some filetypes with <q>
-autocmd("FileType", {
-  group = augroup("close_with_q"),
+autocmd('FileType', {
+  group = augroup('close_with_q'),
   pattern = {
-    "PlenaryTestPopup",
-    "grug-far",
-    "help",
-    "lspinfo",
-    "notify",
-    "qf",
-    "spectre_panel",
-    "startuptime",
-    "tsplayground",
-    "neotest-output",
-    "checkhealth",
-    "neotest-summary",
-    "neotest-output-panel",
-    "dbout",
-    "gitsigns.blame",
+    'PlenaryTestPopup',
+    'grug-far',
+    'help',
+    'lspinfo',
+    'notify',
+    'qf',
+    'spectre_panel',
+    'startuptime',
+    'tsplayground',
+    'neotest-output',
+    'checkhealth',
+    'neotest-summary',
+    'neotest-output-panel',
+    'dbout',
+    'gitsigns.blame',
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
-    vim.keymap.set("n", "q", "<cmd>close<cr>", {
+    vim.keymap.set('n', 'q', '<cmd>close<cr>', {
       buffer = event.buf,
       silent = true,
-      desc = "Quit buffer",
+      desc = 'Quit buffer',
     })
   end,
 })
 
 -- make it easier to close man-files when opened inline
-autocmd("FileType", {
-  group = augroup("man_unlisted"),
-  pattern = { "man" },
+autocmd('FileType', {
+  group = augroup('man_unlisted'),
+  pattern = { 'man' },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
   end,
 })
 
 -- wrap and check for spell in text filetypes
-autocmd("FileType", {
-  group = augroup("wrap_spell"),
-  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
+autocmd('FileType', {
+  group = augroup('wrap_spell'),
+  pattern = { 'text', 'plaintex', 'typst', 'gitcommit', 'markdown' },
   callback = function()
     vim.opt_local.wrap = true
     vim.opt_local.spell = true
@@ -123,23 +123,22 @@ autocmd("FileType", {
 })
 
 -- Fix conceallevel for json files
-autocmd({ "FileType" }, {
-  group = augroup("json_conceal"),
-  pattern = { "json", "jsonc", "json5" },
+autocmd({ 'FileType' }, {
+  group = augroup('json_conceal'),
+  pattern = { 'json', 'jsonc', 'json5' },
   callback = function()
     vim.opt_local.conceallevel = 0
   end,
 })
 
 -- Auto create dir when saving a file, in case some intermediate directory does not exist
-autocmd({ "BufWritePre" }, {
-  group = augroup("auto_create_dir"),
+autocmd({ 'BufWritePre' }, {
+  group = augroup('auto_create_dir'),
   callback = function(event)
-    if event.match:match("^%w%w+:[\\/][\\/]") then
+    if event.match:match('^%w%w+:[\\/][\\/]') then
       return
     end
     local file = vim.uv.fs_realpath(event.match) or event.match
-    vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+    vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
   end,
 })
-

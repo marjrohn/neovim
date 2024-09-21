@@ -1,6 +1,5 @@
 return {
-  -- colorscheme
-  {
+  { -- colorscheme
     'rose-pine/neovim',
     name = 'rose-pine',
     lazy = false,
@@ -10,8 +9,10 @@ return {
     end,
   },
 
-  -- treesitter
-  {
+  -- raibow parentheses
+  { 'HiPhish/rainbow-delimiters.nvim', depedencies = 'nvim-treesitter/nvim-treesitter' },
+
+  { -- treesitter
     'nvim-treesitter/nvim-treesitter',
     version = false,
     build = ':TSUpdate',
@@ -19,15 +20,26 @@ return {
       require('configure.treesitter')
     end,
   },
-  { 'nvim-treesitter/nvim-treesitter-textobjects', dependencies = { 'nvim-treesitter/nvim-treesitter' } },
-  
-  -- lualine
-  { 
+  { 'nvim-treesitter/nvim-treesitter-textobjects', dependencies = 'nvim-treesitter/nvim-treesitter' },
+
+  { -- statusline
     'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    dependencies = 'nvim-tree/nvim-web-devicons',
     event = 'UiEnter',
     config = function()
       require('configure.lualine')
+    end,
+  },
+
+  -- winbar
+  { 'Bekaboo/dropbar.nvim', dependencies = 'nvim-tree/nvim-web-devicons', event = 'UiEnter', config = true },
+
+  { -- tabline
+    'nanozuki/tabby.nvim',
+    event = 'UiEnter',
+    dependencies = { 'nvim-tree/nvim-web-devicons', 'nvim-lualine/lualine.nvim' },
+    config = function()
+      require('configure.tabby')
     end,
   },
 }

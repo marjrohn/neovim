@@ -43,40 +43,9 @@ opts.sections.lualine_c = {
     separator = { left = '', right = '' },
     padding = 0,
     color = function(section)
-      local mode = vim.fn.mode()
-      local bg = vim.g.lualine_theme.normal.a.bg
-      local fg = vim.g.lualine_theme.normal.a.fg
+      local mode = require('utils').get_mode_for_theme()
 
-      for _, m in ipairs({ 'i', 'ic', 'ix' }) do
-        if mode == m then
-          bg = vim.g.lualine_theme.insert.a.bg
-          break
-        end
-      end
-
-      -- \22 is CTRL-V
-      for _, m in ipairs({ 'v', 'vs', 'V', 'Vs', '\22', '\22s', 's', 'S', 'CTRL-S' }) do
-        if mode == m then
-          bg = vim.g.lualine_theme.visual.a.bg
-          break
-        end
-      end
-
-      for _, m in ipairs({ 'R', 'Rc', 'Rv', 'Rvc', 'Rvx' }) do
-        if mode == m then
-          bg = vim.g.lualine_theme.replace.a.bg
-          break
-        end
-      end
-
-      for _, m in ipairs({ 'c', 'cr', 'cv', 'cvr' }) do
-        if mode == m then
-          bg = vim.g.lualine_theme.command.a.bg
-          break
-        end
-      end
-
-      return { fg = fg, bg = bg }
+      return { bg = vim.g.lualine_theme[mode].a.bg, fg = vim.g.lualine_theme[mode].a.fg, gui = 'bold' }
     end,
   },
 }
