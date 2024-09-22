@@ -52,8 +52,17 @@ return {
     end,
   },
 
-  -- buffers per tab
+  -- buffers
   { 'tiagovla/scope.nvim', config = true },
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    event = 'VeryLazy',
+    dependencies = { "nvim-lua/plenary.nvim" }
+    config = function()
+      require'configure.harpoon'
+    end
+  },
 
   -- show marks in sign column
   { 'chentoast/marks.nvim', event = 'VeryLazy', config = true },
