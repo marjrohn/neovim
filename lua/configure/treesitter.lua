@@ -14,7 +14,7 @@ opts.ensure_installed = {
   'query',
   'regex',
 }
-opts.auto_install = false
+opts.sync_install = true
 opts.incremental_selection = { enable = true }
 opts.incremental_selection.keymaps = {
   init_selection = '<c-space>',
@@ -55,8 +55,14 @@ opts.textobjects.move.goto_previous_start = {
 
 require('nvim-treesitter.configs').setup(opts)
 
+-- change fold method to use treesitter
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldtext = 'v:lua.vim.treesitter.foldtext()'
+
 -- textobjects keymaps
 local map = vim.keymap.set
+
 local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
 
 -- repeat movement with ; and ,

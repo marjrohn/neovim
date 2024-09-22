@@ -38,6 +38,11 @@ map('n', '<leader>ur', '<cmd>nohlsearch<Bar>diffupdate<Bar>normal! <c-L><cr>', {
 -- disable annoying 'q:' key
 map('n', 'q:', '<nop')
 
+-- disable 'cut' behavior when delete with x
+map({ 'n', 'v' }, 'x', '"_x', { remap = True })
+map({ 'n', 'v' }, 'X', '"_X', { remap = True })
+map({ 'n', 'v' }, '<del>', '"_<del>', { remap = True })
+
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 map('n', 'n', "'Nn'[v:searchforward].'zv'", { desc = 'Next Search Result', expr = true, silent = true })
 map('x', 'n', "'Nn'[v:searchforward]", { desc = 'Next Search Result', expr = true, silent = true })
@@ -68,6 +73,7 @@ map('v', '<s-tab>', '<gv')
 -- comment
 map('n', 'gco', 'o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Bellow', silent = true })
 map('n', 'gcO', 'O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Above', silent = true })
+map('n', 'gcA', '<cmd>normal gcc"xdW<cr>A <esc>"xpA')
 
 -- quit
 map('n', '<leader>q', '<cmd>confirm q<cr>', { desc = 'Quit', silent = true })
@@ -108,8 +114,6 @@ map('n', '<s-l>', '<cmd>bnext<cr>', { desc = 'Next Buffer', silent = true })
 map('n', '[b', '<cmd>bprevious<cr>', { desc = 'Prev Buffer', silent = true })
 map('n', ']b', '<cmd>bnext<cr>', { desc = 'Next Buffer', silent = true })
 map('n', '<leader>bb', '<cmd>e #<cr>', { desc = 'Switch to Other Buffer', silent = true })
-map('n', '<leader>bd', '<cmd>Bclose<cr>', { desc = 'Delete Buffer', silent = true })
-map('n', '<leader>c', '<cmd>Bclose<cr>', { desc = 'Delete Buffer', silent = true })
 map('n', '<leader>bD', '<cmd>:bdelete<cr>', { desc = 'Delete Buffer and Window', silent = true })
 
 -- windows

@@ -10,17 +10,18 @@ return {
   },
 
   { -- treesitter
-    'nvim-treesitter/nvim-treesitter',
-    version = false,
-    build = ':TSUpdate',
-    config = function()
-      require('configure.treesitter')
-    end,
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    dependencies = {
+      {
+        'nvim-treesitter/nvim-treesitter',
+        version = false,
+        build = ':TSUpdate',
+        config = function()
+          require('configure.treesitter')
+        end,
+      },
+    },
   },
-  { 'nvim-treesitter/nvim-treesitter-textobjects', dependencies = 'nvim-treesitter/nvim-treesitter' },
-
-  -- raibow parentheses
-  { 'HiPhish/rainbow-delimiters.nvim', depedencies = 'nvim-treesitter/nvim-treesitter' },
 
   { -- statusline
     'nvim-lualine/lualine.nvim',
@@ -43,9 +44,69 @@ return {
     end,
   },
 
+  { -- signcolumn customization
+    'luukvbaal/statuscol.nvim',
+    event = 'UiEnter',
+    config = function()
+      require('configure.statuscol')
+    end,
+  },
+
   -- buffers per tab
-  { "tiagovla/scope.nvim", config = true },
+  { 'tiagovla/scope.nvim', config = true },
 
   -- show marks in sign column
-  { "chentoast/marks.nvim", event = "VeryLazy", config = true },
+  { 'chentoast/marks.nvim', event = 'VeryLazy', config = true },
+
+  --- mini library
+  { -- better text-objects
+    'echasnovski/mini.ai',
+    event = 'VeryLazy',
+    dependencies = 'nvim-treesitter/nvim-treesitter-textobjects',
+    config = function()
+      require('configure.mini.ai')
+    end,
+  },
+
+  -- text alignment
+  { 'echasnovski/mini.align', event = 'VeryLazy', config = true },
+
+  -- auto highlight word under cursor
+  { 'echasnovski/mini.cursorword', event = 'VeryLazy', config = true },
+
+  -- indent current scope with animation
+  {
+    'echasnovski/mini.indentscope',
+    event = 'VeryLazy',
+    config = function()
+      require('configure.mini.indentscope')
+    end,
+  },
+  {
+    'echasnovski/mini.files',
+    event = 'VeryLazy',
+    config = function()
+      require('configure.mini.files')
+    end,
+  },
+
+  -- auto pairs certain characteres
+  { 'echasnovski/mini.pairs', event = 'VeryLazy', config = true },
+
+  -- split/join arguments under cursor
+  { 'echasnovski/mini.splitjoin', event = 'VeryLazy', config = true },
+
+  -- surrounding manipulation
+  { 'echasnovski/mini.surround', event = 'VeryLazy', config = true },
+  ---
+
+  --- git
+  { -- show git diff in signcolumn
+    'lewis6991/gitsigns.nvim',
+    event = 'VeryLazy',
+    config = function()
+      require('configure.gitsigns')
+    end,
+  },
+  ---
 }

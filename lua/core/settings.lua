@@ -3,15 +3,22 @@
 local g = vim.g
 local opt = vim.opt
 
+-- colorscheme (builtin)
+g.default_colorscheme = 'sorbet'
+
 -- set leader to space key
 g.mapleader = ' '
 g.localmapleader = ','
 
+-- silent providers warning when running ':checkhealth'
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
+
 -- fix markdown indentation settings and enable folding
 g.markdown_folding = 1
 g.markdown_recommended_style = 0
-
-g.default_colorscheme = 'sorbet'
 
 -- enable auto save
 opt.autowriteall = true
@@ -37,8 +44,23 @@ opt.cursorline = true
 -- use space insted of tabs
 opt.expandtab = true
 
--- remove '~' char for empty lines
-opt.fillchars:append({ eob = ' ' })
+-- remove '~' char for empty lines and change fold chars
+opt.fillchars:append({
+  foldopen = '',
+  foldclose = '',
+  foldsep = '',
+  eob = ' ',
+})
+
+-- folding
+opt.foldenable = true
+opt.foldmethod = 'indent'
+opt.foldcolumn = '1'
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+
+-- preview substituition live as you type
+opt.inccommand = 'split'
 
 -- case insentive search
 opt.infercase = true
@@ -71,8 +93,6 @@ opt.scrolloff = 4
 -- round indentation with '>' ('<') to shiftwidth
 opt.shiftround = true
 
--- numbers of space inserted for indentation;
-
 -- use the same value of 'tabstop' as indentation size
 opt.shiftwidth = 0
 
@@ -85,8 +105,12 @@ opt.sidescrolloff = 8
 -- always show signcolumn, otherwise it would shift the text each time
 opt.signcolumn = 'yes'
 
+-- make search case-sensitive if pattern contain upper case letters
+opt.smartcase = true
+
 -- insert indents automatically
 opt.smartindent = true
+
 opt.smoothscroll = true
 
 -- set langueges for spell check
