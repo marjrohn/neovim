@@ -19,7 +19,7 @@ opts.incremental_selection = { enable = true }
 opts.incremental_selection.keymaps = {
   init_selection = '<c-space>',
   node_incremental = '<c-space>',
-  scope_incremental = '<c-tab>',
+  scope_incremental = false,
   node_decremental = '<bs>',
 }
 
@@ -54,11 +54,6 @@ opts.textobjects.move.goto_previous_start = {
 }
 
 require('nvim-treesitter.configs').setup(opts)
-
--- change fold method to use treesitter
-vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-vim.opt.foldtext = 'v:lua.vim.treesitter.foldtext()'
 
 -- textobjects keymaps
 local map = vim.keymap.set

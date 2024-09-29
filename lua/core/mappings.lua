@@ -73,7 +73,7 @@ map('v', '<s-tab>', '<gv')
 -- comment
 map('n', 'gco', 'o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Bellow', silent = true })
 map('n', 'gcO', 'O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Above', silent = true })
-map('n', 'gcA', '<cmd>normal gcc"xdW<cr>A <esc>"xpA')
+map('n', 'gcA', '<cmd>normal gcc^"0dW<cr>A <esc>"0pA')
 
 -- quit
 map('n', '<leader>q', '<cmd>confirm q<cr>', { desc = 'Quit', silent = true })
@@ -115,18 +115,45 @@ map('n', '[b', '<cmd>bprevious<cr>', { desc = 'Prev Buffer', silent = true })
 map('n', ']b', '<cmd>bnext<cr>', { desc = 'Next Buffer', silent = true })
 map('n', '<leader>bb', '<cmd>e #<cr>', { desc = 'Switch to Other Buffer', silent = true })
 map('n', '<leader>bD', '<cmd>:bdelete<cr>', { desc = 'Delete Buffer and Window', silent = true })
+map('n', '<leader>bd', function()
+  if
+    #vim
+      .iter(vim.api.nvim_list_bufs())
+      :filter(function(buf)
+        return vim.fn.buflisted(buf) == 1
+      end)
+      :totable() == 1
+  then
+    if vim.fn.bufname() ~= '' then
+      vim.cmd([[enew]])
+      vim.cmd([[confirm bdelete #]])
+    end
+  else
+    vim.cmd([[bprevious]])
+    vim.cmd([[confirm bdelete #]])
+  end
+end, { desc = 'Delete Buffer', silent = true })
 
 -- windows
 map('n', '<leader>w', '<c-w>', { desc = 'Windows', remap = true, silent = true })
-map('n', '\\', '<c-w>s', { desc = 'Split Window Below', silent = true })
-map('n', '|', '<c-w>v', { desc = 'Split Window Right', silent = true })
-map('n', '<leader>wd', '<c-w>c', { desc = 'Delete Windows', remap = true, silent = true })
+map('n', '<c-w><tab>', '<c-w>T', { desc = 'Move Windows to a New Tab', silent = true })
+map('n', '<leader>\\', '<c-w>s', { desc = 'Split Window Below', silent = true })
+map('n', '<leader>|', '<c-w>v', { desc = 'Split Window Right', silent = true })
 
 -- tabs
-map('n', '<leader><tab>l', '<cmd>tablast<cr>', { desc = 'Last Tab', silent = true })
-map('n', '<leader><tab>o', '<cmd>tabonly<cr>', { desc = 'Close Other Tabs', silent = true })
-map('n', '<leader><tab>f', '<cmd>tabfirst<cr>', { desc = 'First Tab', silent = true })
-map('n', '<leader><tab><tab>', '<cmd>tabnew<cr>', { desc = 'New Tab', silent = true })
 map('n', '<leader><tab>]', '<cmd>tabnext<cr>', { desc = 'Next Tab', silent = true })
-map('n', '<leader><tab>d', '<cmd>tabclose<cr>', { desc = 'Close Tab', silent = true })
 map('n', '<leader><tab>[', '<cmd>tabprevious<cr>', { desc = 'Previous Tab', silent = true })
+map('n', '<leader><tab><tab>', '<cmd>tabnew<cr>', { desc = 'New Tab', silent = true })
+map('n', '<leader><tab>n', '<cmd>tabnew<cr>', { desc = 'New Tab', silent = true })
+map('n', '<leader><tab>l', '<cmd>tablast<cr>', { desc = 'Last Tab', silent = true })
+map('n', '<leader><tab>$', '<cmd>tablast<cr>', { desc = 'Last Tab', silent = true })
+map('n', '<leader><tab>f', '<cmd>tabfirst<cr>', { desc = 'First Tab', silent = true })
+map('n', '<leader><tab>0', '<cmd>tabfirst<cr>', { desc = 'First Tab', silent = true })
+map('n', '<leader><tab>D', '<cmd>tabonly<cr>', { desc = 'Close Other Tabs', silent = true })
+map('n', '<leader><tab>d', '<cmd>tabclose<cr>', { desc = 'Close Tab', silent = true })
+
+for i = 1, 9 do
+  map('n', '<a-' .. i .. '>', '<cmd>silent! tabnext ' .. i .. '<cr>', { desc = 'Go to Tab ' .. i, silent = true })
+end
+
+map('n', '<a-0>', '<cmd>tablast<cr>', { desc = 'Last Tab', silent = true })

@@ -1,8 +1,15 @@
 return {
+  { -- LSP config for lua
+    'folke/lazydev.nvim',
+    ft = 'lua',
+    config = function()
+      require('configure.lazydev')
+    end,
+  },
+
   { -- colorscheme
     'rose-pine/neovim',
     name = 'rose-pine',
-    lazy = false,
     priority = 1000,
     config = function()
       require('configure.rose_pine')
@@ -14,13 +21,24 @@ return {
     dependencies = {
       {
         'nvim-treesitter/nvim-treesitter',
-        version = false,
         build = ':TSUpdate',
         config = function()
           require('configure.treesitter')
         end,
       },
     },
+  },
+
+  { -- telescope
+    'nvim-telescope/telescope.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+    },
+    cmd = 'Telescope',
+    config = function()
+      require('configure.telescope')
+    end,
   },
 
   { -- statusline
@@ -38,13 +56,17 @@ return {
   { -- tabline
     'nanozuki/tabby.nvim',
     event = 'UiEnter',
-    dependencies = { 'nvim-tree/nvim-web-devicons', 'nvim-lualine/lualine.nvim' },
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+      'nvim-lualine/lualine.nvim',
+      'tiagovla/scope.nvim',
+    },
     config = function()
       require('configure.tabby')
     end,
   },
 
-  { -- signcolumn customization
+  { -- signcolumn
     'luukvbaal/statuscol.nvim',
     event = 'UiEnter',
     config = function()
@@ -52,22 +74,10 @@ return {
     end,
   },
 
-  -- buffers
-  { 'tiagovla/scope.nvim', config = true },
-  {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    event = 'VeryLazy',
-    dependencies = { "nvim-lua/plenary.nvim" }
-    config = function()
-      require'configure.harpoon'
-    end
-  },
-
-  -- show marks in sign column
+  -- show marks in signcolumn
   { 'chentoast/marks.nvim', event = 'VeryLazy', config = true },
 
-  --- mini library
+  --[[ mini library ]]
   { -- better text-objects
     'echasnovski/mini.ai',
     event = 'VeryLazy',
@@ -80,18 +90,10 @@ return {
   -- text alignment
   { 'echasnovski/mini.align', event = 'VeryLazy', config = true },
 
-  -- auto highlight word under cursor
+  --  highlight word under cursor
   { 'echasnovski/mini.cursorword', event = 'VeryLazy', config = true },
 
-  -- indent current scope with animation
-  {
-    'echasnovski/mini.indentscope',
-    event = 'VeryLazy',
-    config = function()
-      require('configure.mini.indentscope')
-    end,
-  },
-  {
+  { -- file management
     'echasnovski/mini.files',
     event = 'VeryLazy',
     config = function()
@@ -99,17 +101,22 @@ return {
     end,
   },
 
-  -- auto pairs certain characteres
-  { 'echasnovski/mini.pairs', event = 'VeryLazy', config = true },
+  { -- auto pairs
+    'echasnovski/mini.pairs',
+    event = 'VeryLazy',
+    config = function()
+      require('configure.mini.pairs')
+    end,
+  },
 
   -- split/join arguments under cursor
   { 'echasnovski/mini.splitjoin', event = 'VeryLazy', config = true },
 
-  -- surrounding manipulation
+  -- surrounding
   { 'echasnovski/mini.surround', event = 'VeryLazy', config = true },
-  ---
+  --]]
 
-  --- git
+  --[[ git ]]
   { -- show git diff in signcolumn
     'lewis6991/gitsigns.nvim',
     event = 'VeryLazy',
@@ -117,5 +124,5 @@ return {
       require('configure.gitsigns')
     end,
   },
-  ---
+  --]]
 }

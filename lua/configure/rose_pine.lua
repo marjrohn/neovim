@@ -13,7 +13,7 @@ local modes = {
   visual = palette.iris,
   replace = palette.pine,
   command = palette.love,
-  inactive = palette.surface,
+  inactive = palette.overlay,
 }
 
 local background = 'none'
@@ -26,12 +26,16 @@ for mode, color in pairs(modes) do
   local is_inactive = (mode == 'inactive')
   local fg_a = is_inactive and fg_muted or fg_base
   local fg_b = is_inactive and fg_muted or fg_text
+  local gui = (not is_inactive) and 'bold'
 
   theme[mode] = {
-    a = { bg = color, fg = fg_a, gui = 'bold' },
+    a = { bg = color, fg = fg_a, gui = gui },
     b = { bg = background, fg = fg_b },
-    c = { bg = background, fg = color, gui = 'bold' },
+    c = { bg = background, fg = color, gui = gui },
   }
 end
 
 vim.g.lualine_theme = theme
+
+vim.cmd.highlight('CursorLineNr guifg=' .. palette.gold)
+vim.cmd.highlight('Identifier guifg=' .. palette.love)

@@ -48,13 +48,14 @@ opt.expandtab = true
 opt.fillchars:append({
   foldopen = '',
   foldclose = '',
-  foldsep = '',
+  foldsep = ' ',
   eob = ' ',
 })
 
 -- folding
 opt.foldenable = true
-opt.foldmethod = 'indent'
+opt.foldmethod = 'expr'
+opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 opt.foldcolumn = '1'
 opt.foldlevel = 99
 opt.foldlevelstart = 99
@@ -139,7 +140,7 @@ opt.title = true
 
 -- automatically saves undo history to a file
 opt.undofile = true
-opt.undolevels = 5000
+opt.undolevels = 10000
 
 -- save content to swap files after 0.4 seconds without typing
 opt.updatetime = 400
