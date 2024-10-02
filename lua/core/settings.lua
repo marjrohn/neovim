@@ -29,9 +29,6 @@ opt.backspace:append({ 'nostop' })
 -- wrap indent
 opt.breakindent = true
 
--- sync system clipboard to '*' and '+' registers
-opt.clipboard = 'unnamedplus'
-
 -- insert mode completion options
 opt.completeopt = { 'menu', 'menuone', 'noselect' }
 

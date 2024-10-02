@@ -1,22 +1,5 @@
 return {
-  { -- LSP config for lua
-    'folke/lazydev.nvim',
-    ft = 'lua',
-    config = function()
-      require('configure.lazydev')
-    end,
-  },
-
-  { -- colorscheme
-    'rose-pine/neovim',
-    name = 'rose-pine',
-    priority = 1000,
-    config = function()
-      require('configure.rose_pine')
-    end,
-  },
-
-  { -- treesitter
+  { -- treesitter configuration
     'nvim-treesitter/nvim-treesitter-textobjects',
     dependencies = {
       {
@@ -29,7 +12,7 @@ return {
     },
   },
 
-  { -- telescope
+  { -- fizzy finder
     'nvim-telescope/telescope.nvim',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -38,6 +21,16 @@ return {
     cmd = 'Telescope',
     config = function()
       require('configure.telescope')
+    end,
+  },
+
+  --{{{ UI
+  { -- colorscheme
+    'rose-pine/neovim',
+    name = 'rose-pine',
+    priority = 1000,
+    config = function()
+      require('configure.rose_pine')
     end,
   },
 
@@ -50,8 +43,12 @@ return {
     end,
   },
 
-  -- winbar
-  { 'Bekaboo/dropbar.nvim', dependencies = 'nvim-tree/nvim-web-devicons', event = 'UiEnter', config = true },
+  { -- winbar
+    'Bekaboo/dropbar.nvim',
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    event = 'UiEnter',
+    config = true,
+  },
 
   { -- tabline
     'nanozuki/tabby.nvim',
@@ -76,8 +73,20 @@ return {
 
   -- show marks in signcolumn
   { 'chentoast/marks.nvim', event = 'VeryLazy', config = true },
+  --}}}
 
-  --[[ mini library ]]
+  { -- file explorer
+    'stevearc/oil.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require("configure.oil")
+    end
+  },
+
+  -- auto pairs
+  { 'windwp/nvim-autopairs', event = 'InsertEnter', config = true },
+
+  --{{{ mini library
   { -- better text-objects
     'echasnovski/mini.ai',
     event = 'VeryLazy',
@@ -101,22 +110,14 @@ return {
     end,
   },
 
-  { -- auto pairs
-    'echasnovski/mini.pairs',
-    event = 'VeryLazy',
-    config = function()
-      require('configure.mini.pairs')
-    end,
-  },
-
   -- split/join arguments under cursor
   { 'echasnovski/mini.splitjoin', event = 'VeryLazy', config = true },
 
   -- surrounding
   { 'echasnovski/mini.surround', event = 'VeryLazy', config = true },
-  --]]
+  --}}}
 
-  --[[ git ]]
+  --{{{ git
   { -- show git diff in signcolumn
     'lewis6991/gitsigns.nvim',
     event = 'VeryLazy',
@@ -124,5 +125,5 @@ return {
       require('configure.gitsigns')
     end,
   },
-  --]]
+  --}}}
 }

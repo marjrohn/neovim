@@ -2,6 +2,10 @@
 
 local map = vim.keymap.set
 
+if vim.g.mapleader == ' ' then
+  map('n', '<space>', '<nop>')
+end
+
 -- better up/down
 map({ 'n', 'x' }, 'j', "v:count == 0 ? 'gj' : 'j'", { desc = 'Down', expr = true, silent = true })
 map({ 'n', 'x' }, '<down>', "v:count == 0 ? 'gj' : 'j'", { desc = 'Down', expr = true, silent = true })
@@ -35,13 +39,8 @@ map({ 'n', 'i' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and Clear Hight
 -- Clear search, diff update and redraw
 map('n', '<leader>ur', '<cmd>nohlsearch<Bar>diffupdate<Bar>normal! <c-L><cr>', { desc = 'Redraw', silent = true })
 
--- disable annoying 'q:' key
+-- disable annoying 'q:' command
 map('n', 'q:', '<nop')
-
--- disable 'cut' behavior when delete with x
-map({ 'n', 'v' }, 'x', '"_x', { remap = True })
-map({ 'n', 'v' }, 'X', '"_X', { remap = True })
-map({ 'n', 'v' }, '<del>', '"_<del>', { remap = True })
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 map('n', 'n', "'Nn'[v:searchforward].'zv'", { desc = 'Next Search Result', expr = true, silent = true })
@@ -52,11 +51,11 @@ map('x', 'N', "'nN'[v:searchforward]", { desc = 'Prev Search Result', expr = tru
 map('o', 'N', "'nN'[v:searchforward]", { desc = 'Prev Search Result', expr = true, silent = true })
 
 -- undo break-points
-map('i', ',', ',<c-g>u', { silent = true })
-map('i', '.', '.<c-g>u', { silent = true })
-map('i', ';', ';<c-g>u', { silent = true })
-map('i', ':', ':<c-g>u', { silent = true })
-map('i', '/', '/<c-g>u', { silent = true })
+map('i', ',', ',<c-g>u')
+map('i', '.', '.<c-g>u')
+map('i', ';', ';<c-g>u')
+map('i', ':', ':<c-g>u')
+map('i', '/', '/<c-g>u')
 
 -- file saving
 map({ 'n', 'i', 'x', 's' }, '<c-s>', '<cmd>w<cr><esc>', { desc = 'Save File', silent = true })
@@ -70,10 +69,81 @@ map('v', '<tab>', '>gv')
 map('v', '<', '<gv')
 map('v', '<s-tab>', '<gv')
 
+--{{{ yank
+-- yank to system clipboard
+map({ 'n', 'v' }, '<leader>y', '"+y', { desc = 'Yank (System Clipboard)', silent = true })
+map({ 'n', 'v' }, '<leader>d', '"+d', { desc = 'Delete (System Clipboard)', silent = true })
+map({ 'n', 'v' }, '<leader>c', '"+c', { desc = 'Change (System Clipboard)', silent = true })
+
+-- paste to system clipboard
+map({ 'n', 'v' }, '<leader>p', '"+p', { desc = 'Paste After Cursor (System Clipboard)', silent = true })
+map({ 'n', 'v' }, '<leader>P', '"+P', { desc = 'Paste Before Cursor (System Clipboard)', silent = true })
+
+--{{{ don't yank if line is blank
+map('n', 'yy', function()
+  if vim.fn.getline('.') ~= '' then
+    vim.cmd([[normal! yy]])
+  end
+end, { desc = 'Yank Current Line', silent = true })
+
+map('n', '<leader>yy', function()
+  if vim.fn.getline('.') ~= '' then
+    vim.api.nvim_feedkeys('"+yy', 'n', false)
+  end
+end, {
+  desc = 'Yank Current Line (System Clipboard)',
+  silent = true,
+})
+
+map('n', 'dd', function()
+  if vim.fn.getline('.'):match('^%s*$') then
+    vim.api.nvim_feedkeys('"_dd', 'n', false)
+  else
+    vim.cmd([[normal! dd]])
+  end
+end, { desc = 'Delete Current Line', silent = true })
+
+map('n', '<leader>dd', function()
+  if vim.fn.getline('.'):match('^%s*$') then
+    vim.api.nvim_feedkeys('"_dd', 'n', false)
+  else
+    vim.api.nvim_feedkeys('"+dd', 'n', false)
+  end
+end, {
+  desc = 'Delete Current Line (System Clipboard)',
+  silent = true,
+})
+
+map('n', 'cc', function()
+  if vim.fn.getline('.'):match('^%s*$') then
+    vim.api.nvim_feedkeys('"_cc', 'n', false)
+  else
+    vim.cmd([[normal! cc]])
+  end
+end, { desc = 'Change Current Line', silent = true })
+
+map('n', '<leader>cc', function()
+  if vim.fn.getline('.'):match('^%s*$') then
+    vim.api.nvim_feedkeys('"_cc', 'n', false)
+  else
+    vim.api.nvim_feedkeys('"+cc', 'n', false)
+  end
+end, {
+  desc = 'Change Current Line (System Clipboard)',
+  silent = true,
+})
+--}}}
+
+-- don't yank when delete with 'x'
+map({ 'n', 'v' }, 'x', '"_x')
+map({ 'n', 'v' }, 'X', '"_X')
+map({ 'n', 'v' }, '<del>', '"_<del>')
+--}}}
+
 -- comment
 map('n', 'gco', 'o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Bellow', silent = true })
 map('n', 'gcO', 'O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Above', silent = true })
-map('n', 'gcA', '<cmd>normal gcc^"0dW<cr>A <esc>"0pA')
+map('n', 'gcA', '<cmd>normal gcc^"0dW<cr>A <esc>"0pA', { desc = 'Add Comment to End', silent = true })
 
 -- quit
 map('n', '<leader>q', '<cmd>confirm q<cr>', { desc = 'Quit', silent = true })
@@ -91,7 +161,7 @@ map('n', '[l', '<cmd>lprev<cr>', { desc = 'Previous Loclist', silent = true })
 map('n', '[L', '<cmd>lfirst<cr>', { desc = 'First Loclist', silent = true })
 map('n', ']L', '<cmd>llast<cr>', { desc = 'Last Loclist', silent = true })
 
--- diagnostics
+--{{{ diagnostics
 local diagnostic_goto = function(next, severity)
   local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
   severity = severity and vim.diagnostic.severity[severity] or nil
@@ -107,8 +177,9 @@ map('n', ']e', diagnostic_goto(true, 'ERROR'), { desc = 'Next Diagnostic Error',
 map('n', '[e', diagnostic_goto(false, 'ERROR'), { desc = 'Previous Diagnostic Error', silent = true })
 map('n', ']w', diagnostic_goto(true, 'WARN'), { desc = 'Next Diagnostic Warning', silent = true })
 map('n', '[w', diagnostic_goto(false, 'WARN'), { desc = 'Previous Diagnostic Warning', silent = true })
+--}}}
 
--- buffers
+--{{{ buffers
 map('n', '<s-h>', '<cmd>bprevious<cr>', { desc = 'Prev Buffer', silent = true })
 map('n', '<s-l>', '<cmd>bnext<cr>', { desc = 'Next Buffer', silent = true })
 map('n', '[b', '<cmd>bprevious<cr>', { desc = 'Prev Buffer', silent = true })
@@ -133,27 +204,37 @@ map('n', '<leader>bd', function()
     vim.cmd([[confirm bdelete #]])
   end
 end, { desc = 'Delete Buffer', silent = true })
+--}}}
 
 -- windows
-map('n', '<leader>w', '<c-w>', { desc = 'Windows', remap = true, silent = true })
 map('n', '<c-w><tab>', '<c-w>T', { desc = 'Move Windows to a New Tab', silent = true })
+map('n', '<leader>w', '<c-w>', { desc = 'Windows', remap = true, silent = true })
 map('n', '<leader>\\', '<c-w>s', { desc = 'Split Window Below', silent = true })
 map('n', '<leader>|', '<c-w>v', { desc = 'Split Window Right', silent = true })
 
--- tabs
-map('n', '<leader><tab>]', '<cmd>tabnext<cr>', { desc = 'Next Tab', silent = true })
-map('n', '<leader><tab>[', '<cmd>tabprevious<cr>', { desc = 'Previous Tab', silent = true })
+--{{{ tabs
 map('n', '<leader><tab><tab>', '<cmd>tabnew<cr>', { desc = 'New Tab', silent = true })
 map('n', '<leader><tab>n', '<cmd>tabnew<cr>', { desc = 'New Tab', silent = true })
-map('n', '<leader><tab>l', '<cmd>tablast<cr>', { desc = 'Last Tab', silent = true })
-map('n', '<leader><tab>$', '<cmd>tablast<cr>', { desc = 'Last Tab', silent = true })
-map('n', '<leader><tab>f', '<cmd>tabfirst<cr>', { desc = 'First Tab', silent = true })
-map('n', '<leader><tab>0', '<cmd>tabfirst<cr>', { desc = 'First Tab', silent = true })
+
+map('n', '<leader><tab>0', '<cmd>tabfirst<cr>', { desc = 'Go to First Tab', silent = true })
+map('n', '<leader><tab>$', '<cmd>tablast<cr>', { desc = 'Go to Last Tab', silent = true })
+
+map('n', '<leader><tab>]', '<cmd>tabnext<cr>', { desc = 'Next Tab', silent = true })
+map('n', '<leader><tab>[', '<cmd>tabprevious<cr>', { desc = 'Previous Tab', silent = true })
+map('n', '<leader><tab>l', '<cmd>tabnext<cr>', { desc = 'Next Tab', silent = true })
+map('n', '<leader><tab>h', '<cmd>tabprevious<cr>', { desc = 'Previous Tab', silent = true })
+
+map('n', '<leader><tab>0', '<cmd>0tabmove<cr>', { desc = 'Move Tab to the First', silent = true })
+map('n', '<leader><tab>$', '<cmd>$tabmove<cr>', { desc = 'Move Tab to the Last', silent = true })
+
+map('n', '<leader><tab>k', '<cmd>+tabmove<cr>', { desc = 'Move Tab to the Right', silent = true })
+map('n', '<leader><tab>j', '<cmd>-tabmove<cr>', { desc = 'Move Tab to the Left', silent = true })
+
 map('n', '<leader><tab>D', '<cmd>tabonly<cr>', { desc = 'Close Other Tabs', silent = true })
 map('n', '<leader><tab>d', '<cmd>tabclose<cr>', { desc = 'Close Tab', silent = true })
 
 for i = 1, 9 do
+  map('n', '<leader><tab>' .. i, '<cmd>silent! tabnext ' .. i .. '<cr>', { desc = 'Go to Tab ' .. i, silent = true })
   map('n', '<a-' .. i .. '>', '<cmd>silent! tabnext ' .. i .. '<cr>', { desc = 'Go to Tab ' .. i, silent = true })
 end
-
-map('n', '<a-0>', '<cmd>tablast<cr>', { desc = 'Last Tab', silent = true })
+--}}}
