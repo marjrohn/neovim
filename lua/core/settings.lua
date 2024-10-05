@@ -8,7 +8,7 @@ g.default_colorscheme = 'sorbet'
 
 -- set leader to space key
 g.mapleader = ' '
-g.localmapleader = ','
+g.localmapleader = ' '
 
 -- silent providers warning when running ':checkhealth'
 vim.g.loaded_python3_provider = 0
@@ -85,6 +85,21 @@ opt.preserveindent = true
 -- make line numbers relative to current line
 opt.relativenumber = true
 
+-- save and restore options
+vim.opt.sessionoptions = {
+  'blank',
+  'buffers',
+  'curdir',
+  'folds',
+  'globals',
+  'options',
+  'skiprtp',
+  'resize',
+  'tabpages',
+  'winpos',
+  'winsize',
+}
+
 -- minimal numbers of line to keep above (below) the cursor
 opt.scrolloff = 4
 
@@ -110,10 +125,6 @@ opt.smartcase = true
 opt.smartindent = true
 
 opt.smoothscroll = true
-
--- set langueges for spell check
-opt.spelllang = { 'en_us', 'pt_br' }
-opt.spelloptions = { 'camel' }
 
 -- window split behavior
 opt.splitbelow = true

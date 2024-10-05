@@ -48,7 +48,7 @@ opts.line = function(line)
         is_before and { left_sep, hl = sep_hl },
         is_after and not is_current and ' ',
         icon .. ' ',
-        tabnr .. ' ',
+        tabnr .. ': ',
         name,
         tab.close_btn(''),
         is_before and not is_current and ' ',

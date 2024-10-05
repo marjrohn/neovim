@@ -1,6 +1,10 @@
 local opts = {}
 local icons = require('icons')
 
+local section_b_cond = function()
+  return vim.o.columns >= 100
+end
+
 vim.opt.showmode = false
 vim.opt.fillchars = vim.tbl_extend('force', vim.opt.fillchars:get(), {
   stl = '󱘹',
@@ -19,12 +23,12 @@ opts.sections.lualine_a = {
   {
     'mode',
     icon = icons.neovim,
-    padding = 0,
-    separator = { left = '', right = '' },
+    separator = { left = '', right = '' },
+    padding = { left = 1, right = 0 },
   },
 }
 opts.sections.lualine_b = {
-  { 'branch', icon = icons.git.branch },
+  { 'branch', icon = icons.git.branch, cond = section_b_cond },
   {
     'diff',
     symbols = {
@@ -33,6 +37,7 @@ opts.sections.lualine_b = {
       removed = icons.git.diff.removed .. ' ',
     },
     padding = { left = 0, right = 1 },
+    cond = section_b_cond,
   },
 }
 opts.sections.lualine_c = {
@@ -45,24 +50,28 @@ opts.sections.lualine_c = {
     color = function(section)
       local mode = require('utils').get_mode_for_theme()
 
-      return { bg = vim.g.lualine_theme[mode].a.bg, fg = vim.g.lualine_theme[mode].a.fg, gui = 'bold' }
+      return {
+        bg = vim.g.lualine_theme[mode].a.bg,
+        fg = vim.g.lualine_theme[mode].a.fg,
+        gui = 'bold',
+      }
     end,
   },
 }
 opts.sections.lualine_y = {
-  'diagnostics',
   {
     'filetype',
     fmt = function(name)
       return string.upper(name)
     end,
+    cond = section_b_cond,
   },
-  'encoding',
+  { 'encoding', cond = section_b_cond },
 }
 opts.sections.lualine_z = {
   {
     'location',
-    separator = { left = '', right = '' },
+    separator = { left = '', right = '' },
     padding = { left = 0, right = 1 },
   },
 }

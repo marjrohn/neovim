@@ -1,92 +1,7 @@
 return {
-  { -- treesitter configuration
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    dependencies = {
-      {
-        'nvim-treesitter/nvim-treesitter',
-        build = ':TSUpdate',
-        config = function()
-          require('configure.treesitter')
-        end,
-      },
-    },
-  },
-
-  { -- fizzy finder
-    'nvim-telescope/telescope.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
-    },
-    cmd = 'Telescope',
-    config = function()
-      require('configure.telescope')
-    end,
-  },
-
-  --{{{ UI
-  { -- colorscheme
-    'rose-pine/neovim',
-    name = 'rose-pine',
-    priority = 1000,
-    config = function()
-      require('configure.rose_pine')
-    end,
-  },
-
-  { -- statusline
-    'nvim-lualine/lualine.nvim',
-    dependencies = 'nvim-tree/nvim-web-devicons',
-    event = 'UiEnter',
-    config = function()
-      require('configure.lualine')
-    end,
-  },
-
-  { -- winbar
-    'Bekaboo/dropbar.nvim',
-    dependencies = 'nvim-tree/nvim-web-devicons',
-    event = 'UiEnter',
-    config = true,
-  },
-
-  { -- tabline
-    'nanozuki/tabby.nvim',
-    event = 'UiEnter',
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-      'nvim-lualine/lualine.nvim',
-      'tiagovla/scope.nvim',
-    },
-    config = function()
-      require('configure.tabby')
-    end,
-  },
-
-  { -- signcolumn
-    'luukvbaal/statuscol.nvim',
-    event = 'UiEnter',
-    config = function()
-      require('configure.statuscol')
-    end,
-  },
-
   -- show marks in signcolumn
   { 'chentoast/marks.nvim', event = 'VeryLazy', config = true },
-  --}}}
 
-  { -- file explorer
-    'stevearc/oil.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require("configure.oil")
-    end
-  },
-
-  -- auto pairs
-  { 'windwp/nvim-autopairs', event = 'InsertEnter', config = true },
-
-  --{{{ mini library
   { -- better text-objects
     'echasnovski/mini.ai',
     event = 'VeryLazy',
@@ -100,7 +15,9 @@ return {
   { 'echasnovski/mini.align', event = 'VeryLazy', config = true },
 
   --  highlight word under cursor
-  { 'echasnovski/mini.cursorword', event = 'VeryLazy', config = true },
+  { 'echasnovski/mini.cursorword' },
+
+  { 'echasnovski/mini.extra' },
 
   { -- file management
     'echasnovski/mini.files',
@@ -115,9 +32,7 @@ return {
 
   -- surrounding
   { 'echasnovski/mini.surround', event = 'VeryLazy', config = true },
-  --}}}
 
-  --{{{ git
   { -- show git diff in signcolumn
     'lewis6991/gitsigns.nvim',
     event = 'VeryLazy',
@@ -125,5 +40,100 @@ return {
       require('configure.gitsigns')
     end,
   },
-  --}}}
+
+  { -- signcolumn
+    'luukvbaal/statuscol.nvim',
+    event = 'UiEnter',
+    config = function()
+      require('configure.statuscol')
+    end,
+  },
+
+  { -- tabline
+    'nanozuki/tabby.nvim',
+    event = 'UiEnter',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+      'nvim-lualine/lualine.nvim',
+    },
+    config = function()
+      require('configure.tabby')
+    end,
+  },
+
+  -- highlight color
+  { 'NvChad/nvim-colorizer.lua', event = 'VeryLazy', config = true },
+
+  { -- statusline
+    'nvim-lualine/lualine.nvim',
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    event = 'UiEnter',
+    config = function()
+      require('configure.lualine')
+    end,
+  },
+
+  { -- fizzy finder
+    'nvim-telescope/telescope.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+    },
+    cmd = 'Telescope',
+    config = function()
+      require('configure.telescope')
+    end,
+  },
+
+  { -- treesitter configuration
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    dependencies = {
+      {
+        'nvim-treesitter/nvim-treesitter',
+        build = ':TSUpdate',
+        config = function()
+          require('configure.treesitter')
+        end,
+      },
+    },
+  },
+
+  { -- notifications
+    'rcarriga/nvim-notify',
+    event = 'VeryLazy',
+    config = function()
+      require('configure.notify')
+    end,
+  },
+
+  { -- colorscheme
+    'rose-pine/neovim',
+    name = 'rose-pine',
+    priority = 1000,
+    config = function()
+      require('configure.rose_pine')
+    end,
+  },
+
+  { -- file explorer
+    'stevearc/oil.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('configure.oil')
+    end,
+  },
+
+  { -- session management
+    'stevearc/resession.nvim',
+    dependencies = 'tiagovla/scope.nvim',
+    config = function()
+      require('configure.resession')
+    end,
+  },
+
+  -- scoped tabs
+  { 'tiagovla/scope.nvim', config = true },
+
+  -- auto pairs
+  { 'windwp/nvim-autopairs', event = 'InsertEnter', config = true },
 }

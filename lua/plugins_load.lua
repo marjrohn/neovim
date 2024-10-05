@@ -13,7 +13,7 @@ lazy.setup({
     enabled = true,
     notify = true,
     concurrenty = 1, -- check for update slowly
-    frequency = 6 * 3600, -- check for update every six hours
+    frequency = 3600, -- check for update every hour
   },
   performance = {
     rtp = {

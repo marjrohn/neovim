@@ -1,54 +1,65 @@
 -- [[ Genral Keymappings ]]
 
-local map = vim.keymap.set
+local map = function(mode, lhs, rhs, opts)
+  opts = opts or {}
+
+  if opts.silent == nil then
+    opts.silent = true
+  end
+
+  opts.noremap = not opts.remap
+
+  vim.keymap.set(mode, lhs, rhs, opts)
+end
 
 if vim.g.mapleader == ' ' then
   map('n', '<space>', '<nop>')
 end
 
 -- better up/down
-map({ 'n', 'x' }, 'j', "v:count == 0 ? 'gj' : 'j'", { desc = 'Down', expr = true, silent = true })
-map({ 'n', 'x' }, '<down>', "v:count == 0 ? 'gj' : 'j'", { desc = 'Down', expr = true, silent = true })
-map({ 'n', 'x' }, 'k', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = true, silent = true })
-map({ 'n', 'x' }, '<up>', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = true, silent = true })
+map({ 'n', 'x' }, 'j', "v:count == 0 ? 'gj' : 'j'", { desc = 'Down', expr = true })
+map({ 'n', 'x' }, '<down>', "v:count == 0 ? 'gj' : 'j'", { desc = 'Down', expr = true })
+map({ 'n', 'x' }, 'k', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = true })
+map({ 'n', 'x' }, '<up>', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = true })
+
+-- center scrolling
+map('n', '<c-u>', '<c-u>zz')
+map('n', '<c-d>', '<c-d>zz')
 
 -- move to window using <ctrl> hjkl keys
-map('n', '<c-h>', '<c-w>h', { desc = 'Go to Left Window', remap = true, silent = true })
-map('n', '<c-j>', '<c-w>j', { desc = 'Go to Lower Window', remap = true, silent = true })
-map('n', '<c-k>', '<c-w>k', { desc = 'Go to Upper Window', remap = true, silent = true })
-map('n', '<c-l>', '<c-w>l', { desc = 'Go to Right Window', remap = true, silent = true })
+map('n', '<c-h>', '<c-w>h', { desc = 'Go to Left Window', remap = true })
+map('n', '<c-j>', '<c-w>j', { desc = 'Go to Lower Window', remap = true })
+map('n', '<c-k>', '<c-w>k', { desc = 'Go to Upper Window', remap = true })
+map('n', '<c-l>', '<c-w>l', { desc = 'Go to Right Window', remap = true })
 
 -- resize window using <ctrl> arrow keys
-map('n', '<c-up>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height', silent = true })
-map('n', '<c-down>', '<cmd>resize -2<cr>', { desc = 'Decrease Window Height', silent = true })
-map('n', '<c-left>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease Window Width', silent = true })
-map('n', '<c-right>', '<cmd>vertical resize +2<cr>', { desc = 'Increase Window Width', silent = true })
+map('n', '<c-up>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' })
+map('n', '<c-down>', '<cmd>resize -2<cr>', { desc = 'Decrease Window Height' })
+map('n', '<c-left>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease Window Width' })
+map('n', '<c-right>', '<cmd>vertical resize +2<cr>', { desc = 'Increase Window Width' })
 
 -- move lines
-map('n', '<a-j>', '<cmd>m .+1<cr>==', { desc = 'Move Line Down', silent = true })
-map('i', '<a-j>', '<esc><cmd>m .+1<cr>==gi', { desc = 'Move Line Down', silent = true })
-map('v', '<a-j>', ":m '>+1<cr>gv=gv", { desc = 'Move Line Down', silent = true })
+map('n', '<a-j>', '<cmd>m .+1<cr>==', { desc = 'Move Line Down' })
+map('i', '<a-j>', '<esc><cmd>m .+1<cr>==gi', { desc = 'Move Line Down' })
+map('x', '<a-j>', ":m '>+1<cr>gv=gv", { desc = 'Move Line Down' })
 
-map('n', '<a-k>', '<cmd>m .-2<cr>==', { desc = 'Move Line Up', silent = true })
-map('i', '<a-k>', '<esc><cmd>m .-2<cr>==gi', { desc = 'Move Line Up', silent = true })
-map('v', '<a-k>', ":m '<-2<cr>gv=gv", { desc = 'Move Line Down', silent = true })
+map('n', '<a-k>', '<cmd>m .-2<cr>==', { desc = 'Move Line Up' })
+map('i', '<a-k>', '<esc><cmd>m .-2<cr>==gi', { desc = 'Move Line Up' })
+map('x', '<a-k>', ":m '<-2<cr>gv=gv", { desc = 'Move Line Down' })
 
 -- clear search with <esc>
-map({ 'n', 'i' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and Clear Hightlight Search', silent = true })
+map({ 'n', 'i' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and Clear Hightlight Search' })
 
 -- Clear search, diff update and redraw
-map('n', '<leader>ur', '<cmd>nohlsearch<Bar>diffupdate<Bar>normal! <c-L><cr>', { desc = 'Redraw', silent = true })
-
--- disable annoying 'q:' command
-map('n', 'q:', '<nop')
+map('n', '<leader>ur', '<cmd>nohlsearch<Bar>diffupdate<Bar>normal! <c-L><cr>', { desc = 'Redraw' })
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
-map('n', 'n', "'Nn'[v:searchforward].'zv'", { desc = 'Next Search Result', expr = true, silent = true })
-map('x', 'n', "'Nn'[v:searchforward]", { desc = 'Next Search Result', expr = true, silent = true })
-map('o', 'n', "'Nn'[v:searchforward]", { desc = 'Next Search Result', expr = true, silent = true })
-map('n', 'N', "'nN'[v:searchforward].'zv'", { desc = 'Prev Search Result', expr = true, silent = true })
-map('x', 'N', "'nN'[v:searchforward]", { desc = 'Prev Search Result', expr = true, silent = true })
-map('o', 'N', "'nN'[v:searchforward]", { desc = 'Prev Search Result', expr = true, silent = true })
+map('n', 'n', "'Nn'[v:searchforward].'zzzv'", { desc = 'Next Search Result', expr = true })
+map('x', 'n', "'Nn'[v:searchforward]", { desc = 'Next Search Result', expr = true })
+map('o', 'n', "'Nn'[v:searchforward]", { desc = 'Next Search Result', expr = true })
+map('n', 'N', "'nN'[v:searchforward].'zzzv'", { desc = 'Prev Search Result', expr = true })
+map('x', 'N', "'nN'[v:searchforward]", { desc = 'Prev Search Result', expr = true })
+map('o', 'N', "'nN'[v:searchforward]", { desc = 'Prev Search Result', expr = true })
 
 -- undo break-points
 map('i', ',', ',<c-g>u')
@@ -58,108 +69,119 @@ map('i', ':', ':<c-g>u')
 map('i', '/', '/<c-g>u')
 
 -- file saving
-map({ 'n', 'i', 'x', 's' }, '<c-s>', '<cmd>w<cr><esc>', { desc = 'Save File', silent = true })
-
--- new file
-map('n', '<leader>n', '<cmd>enew<cr>', { desc = 'New File' })
+map('n', '<c-s>', '<cmd>w<cr>', { desc = 'Save File' })
 
 -- better indenting
-map('v', '>', '>gv')
-map('v', '<tab>', '>gv')
-map('v', '<', '<gv')
-map('v', '<s-tab>', '<gv')
+map('x', '>', '>gv')
+map('x', '<tab>', '>gv')
+map('x', '<', '<gv')
+map('x', '<s-tab>', '<gv')
 
---{{{ yank
 -- yank to system clipboard
-map({ 'n', 'v' }, '<leader>y', '"+y', { desc = 'Yank (System Clipboard)', silent = true })
-map({ 'n', 'v' }, '<leader>d', '"+d', { desc = 'Delete (System Clipboard)', silent = true })
-map({ 'n', 'v' }, '<leader>c', '"+c', { desc = 'Change (System Clipboard)', silent = true })
+for _, key in ipairs({ 'y', 'Y' }) do
+  map({ 'n', 'x' }, '<leader>' .. key, function()
+    local count = vim.v.count == 0 and '' or vim.v.count
+
+    return '"+' .. count .. key
+  end, { desc = 'Yank (System Clipboard)', expr = true })
+end
 
 -- paste to system clipboard
-map({ 'n', 'v' }, '<leader>p', '"+p', { desc = 'Paste After Cursor (System Clipboard)', silent = true })
-map({ 'n', 'v' }, '<leader>P', '"+P', { desc = 'Paste Before Cursor (System Clipboard)', silent = true })
+for _, key in ipairs({ 'p', 'P' }) do
+  map('n', '<leader>' .. key, function()
+    local count = vim.v.count == 0 and '' or vim.v.count
 
---{{{ don't yank if line is blank
+    return '"+' .. count .. key
+  end, { desc = 'Paste (System Clipboard)', expr = true })
+end
+
+vim.keymap.set('x', 'p', 'P')
+vim.keymap.set('x', 'P', 'p')
+vim.keymap.set('x', '<leader>p', function()
+  local count = vim.v.count == 0 and '' or vim.v.count
+
+  return '"+' .. count .. 'P'
+end, { desc = 'Paste Without Yank (System Clipboard)', expr = true })
+
+vim.keymap.set('x', '<leader>P', function()
+  local count = vim.v.count == 0 and '' or vim.v.count
+
+  return '"+' .. count .. 'p'
+end, { desc = 'Paste (System Clipboard)', expr = true })
+
+--{{{ don't yank to register if line is blank
 map('n', 'yy', function()
   if vim.fn.getline('.') ~= '' then
-    vim.cmd([[normal! yy]])
+    local count = vim.v.count <= 1 and '' or vim.v.count
+    local reg = vim.v.register
+
+    vim.api.nvim_feedkeys('"' .. reg .. count .. 'yy', 'n', false)
   end
-end, { desc = 'Yank Current Line', silent = true })
+end, { desc = 'Yank Current Line' })
 
 map('n', '<leader>yy', function()
   if vim.fn.getline('.') ~= '' then
-    vim.api.nvim_feedkeys('"+yy', 'n', false)
+    local count = vim.v.count <= 1 and '' or vim.v.count
+    local reg = '+'
+
+    vim.api.nvim_feedkeys('"' .. reg .. count .. 'yy', 'n', false)
   end
-end, {
-  desc = 'Yank Current Line (System Clipboard)',
-  silent = true,
-})
+end, { desc = 'Yank Current Line (System Clipboard)' })
 
 map('n', 'dd', function()
-  if vim.fn.getline('.'):match('^%s*$') then
-    vim.api.nvim_feedkeys('"_dd', 'n', false)
-  else
-    vim.cmd([[normal! dd]])
-  end
-end, { desc = 'Delete Current Line', silent = true })
+  local count = vim.v.count <= 1 and '' or vim.v.count
+  local reg = vim.v.register
 
-map('n', '<leader>dd', function()
   if vim.fn.getline('.'):match('^%s*$') then
-    vim.api.nvim_feedkeys('"_dd', 'n', false)
-  else
-    vim.api.nvim_feedkeys('"+dd', 'n', false)
+    reg = '_'
   end
-end, {
-  desc = 'Delete Current Line (System Clipboard)',
-  silent = true,
-})
+
+  vim.api.nvim_feedkeys('"' .. reg .. count .. 'dd', 'n', false)
+end, { desc = 'Delete Current Line' })
 
 map('n', 'cc', function()
-  if vim.fn.getline('.'):match('^%s*$') then
-    vim.api.nvim_feedkeys('"_cc', 'n', false)
-  else
-    vim.cmd([[normal! cc]])
-  end
-end, { desc = 'Change Current Line', silent = true })
+  local count = vim.v.count <= 1 and '' or vim.v.count
+  local reg = vim.v.register
 
-map('n', '<leader>cc', function()
   if vim.fn.getline('.'):match('^%s*$') then
-    vim.api.nvim_feedkeys('"_cc', 'n', false)
-  else
-    vim.api.nvim_feedkeys('"+cc', 'n', false)
+    reg = '_'
   end
-end, {
-  desc = 'Change Current Line (System Clipboard)',
-  silent = true,
-})
+
+  vim.api.nvim_feedkeys('"' .. reg .. count .. 'cc', 'n', false)
+end, { desc = 'Change Current Line' })
 --}}}
 
--- don't yank when delete with 'x'
-map({ 'n', 'v' }, 'x', '"_x')
-map({ 'n', 'v' }, 'X', '"_X')
-map({ 'n', 'v' }, '<del>', '"_<del>')
---}}}
+-- don't yank when delete with `x`
+map({ 'n', 'x' }, 'x', '"_x')
+map({ 'n', 'x' }, 'X', '"_X')
+map({ 'n', 'x' }, '<del>', '"_<del>')
 
--- comment
-map('n', 'gco', 'o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Bellow', silent = true })
-map('n', 'gcO', 'O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Above', silent = true })
-map('n', 'gcA', '<cmd>normal gcc^"0dW<cr>A <esc>"0pA', { desc = 'Add Comment to End', silent = true })
+-- commenting
+map('n', 'gco', 'o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Bellow' })
+map('n', 'gcO', 'O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>', { desc = 'Add Comment Above' })
+map('n', 'gcA', function()
+  if vim.fn.getline('.'):match('^%s*$') then
+    return 'Vcx<esc><cmd><normal gcc<cr>fxa<bs>'
+  end
+
+  return '<cmd>normal gcc^"-dW<cr>A <esc>"-Pa'
+end, { desc = 'Add Comment to End', expr = true })
 
 -- quit
-map('n', '<leader>q', '<cmd>confirm q<cr>', { desc = 'Quit', silent = true })
-map('n', '<leader>Q', '<cmd>confirm qall<cr>', { desc = 'Exit Neovim', silent = true })
+map('n', '<leader>q', '<cmd>confirm q<cr>', { desc = 'Quit' })
+map('n', '<leader>Q', '<cmd>confirm qall<cr>', { desc = 'Exit Neovim' })
 
 -- quickfix
-map('n', ']q', '<cmd>cnext<cr>', { desc = 'Next Quickfix', silent = true })
-map('n', '[q', '<cmd>cprev<cr>', { desc = 'Previous Quickfix', silent = true })
-map('n', '[Q', '<cmd>cfirst<cr>', { desc = 'First Quickfix', silent = true })
-map('n', ']Q', '<cmd>clast<cr>', { desc = 'Last Quickfix', silent = true })
+map('n', ']q', '<cmd>cnext<cr>', { desc = 'Next Quickfix' })
+map('n', '[q', '<cmd>cprev<cr>', { desc = 'Previous Quickfix' })
+map('n', '[Q', '<cmd>cfirst<cr>', { desc = 'First Quickfix' })
+map('n', ']Q', '<cmd>clast<cr>', { desc = 'Last Quickfix' })
 
 -- loclist
-map('n', ']l', '<cmd>lnext<cr>', { desc = 'Next Loclist', silent = true })
-map('n', '[l', '<cmd>lprev<cr>', { desc = 'Previous Loclist', silent = true })
-map('n', '[L', '<cmd>lfirst<cr>', { desc = 'First Loclist', silent = true })
-map('n', ']L', '<cmd>llast<cr>', { desc = 'Last Loclist', silent = true })
+map('n', ']l', '<cmd>lnext<cr>', { desc = 'Next Loclist' })
+map('n', '[l', '<cmd>lprev<cr>', { desc = 'Previous Loclist' })
+map('n', '[L', '<cmd>lfirst<cr>', { desc = 'First Loclist' })
+map('n', ']L', '<cmd>llast<cr>', { desc = 'Last Loclist' })
 
 --{{{ diagnostics
 local diagnostic_goto = function(next, severity)
@@ -171,21 +193,22 @@ local diagnostic_goto = function(next, severity)
   end
 end
 
-map('n', ']d', diagnostic_goto(true), { desc = 'Next Diagnostic', silent = true })
-map('n', '[d', diagnostic_goto(false), { desc = 'Previous Diagnostic', silent = true })
-map('n', ']e', diagnostic_goto(true, 'ERROR'), { desc = 'Next Diagnostic Error', silent = true })
-map('n', '[e', diagnostic_goto(false, 'ERROR'), { desc = 'Previous Diagnostic Error', silent = true })
-map('n', ']w', diagnostic_goto(true, 'WARN'), { desc = 'Next Diagnostic Warning', silent = true })
-map('n', '[w', diagnostic_goto(false, 'WARN'), { desc = 'Previous Diagnostic Warning', silent = true })
+map('n', ']d', diagnostic_goto(true), { desc = 'Next Diagnostic' })
+map('n', '[d', diagnostic_goto(false), { desc = 'Previous Diagnostic' })
+map('n', ']e', diagnostic_goto(true, 'ERROR'), { desc = 'Next Diagnostic Error' })
+map('n', '[e', diagnostic_goto(false, 'ERROR'), { desc = 'Previous Diagnostic Error' })
+map('n', ']w', diagnostic_goto(true, 'WARN'), { desc = 'Next Diagnostic Warning' })
+map('n', '[w', diagnostic_goto(false, 'WARN'), { desc = 'Previous Diagnostic Warning' })
 --}}}
 
 --{{{ buffers
-map('n', '<s-h>', '<cmd>bprevious<cr>', { desc = 'Prev Buffer', silent = true })
-map('n', '<s-l>', '<cmd>bnext<cr>', { desc = 'Next Buffer', silent = true })
-map('n', '[b', '<cmd>bprevious<cr>', { desc = 'Prev Buffer', silent = true })
-map('n', ']b', '<cmd>bnext<cr>', { desc = 'Next Buffer', silent = true })
-map('n', '<leader>bb', '<cmd>e #<cr>', { desc = 'Switch to Other Buffer', silent = true })
-map('n', '<leader>bD', '<cmd>:bdelete<cr>', { desc = 'Delete Buffer and Window', silent = true })
+map('n', '<s-h>', '<cmd>bprevious<cr>', { desc = 'Prev Buffer' })
+map('n', '<s-l>', '<cmd>bnext<cr>', { desc = 'Next Buffer' })
+map('n', '[b', '<cmd>bprevious<cr>', { desc = 'Prev Buffer' })
+map('n', ']b', '<cmd>bnext<cr>', { desc = 'Next Buffer' })
+map('n', '<leader>bn', '<cmd>enew<cr>', { desc = 'New Buffer' })
+map('n', '<leader>bb', '<cmd>edit #<cr>', { desc = 'Switch to Other Buffer' })
+map('n', '<leader>bD', '<cmd>:bdelete<cr>', { desc = 'Delete Buffer and Window' })
 map('n', '<leader>bd', function()
   if
     #vim
@@ -203,38 +226,38 @@ map('n', '<leader>bd', function()
     vim.cmd([[bprevious]])
     vim.cmd([[confirm bdelete #]])
   end
-end, { desc = 'Delete Buffer', silent = true })
+end, { desc = 'Delete Buffer' })
 --}}}
 
 -- windows
-map('n', '<c-w><tab>', '<c-w>T', { desc = 'Move Windows to a New Tab', silent = true })
-map('n', '<leader>w', '<c-w>', { desc = 'Windows', remap = true, silent = true })
-map('n', '<leader>\\', '<c-w>s', { desc = 'Split Window Below', silent = true })
-map('n', '<leader>|', '<c-w>v', { desc = 'Split Window Right', silent = true })
+map('n', '<c-w><tab>', '<c-w>T', { desc = 'Move Windows to a New Tab' })
+map('n', '<leader>w', '<c-w>', { desc = 'Windows', remap = true })
+map('n', '<leader>\\', '<c-w>s', { desc = 'Split Window Below' })
+map('n', '<leader>|', '<c-w>v', { desc = 'Split Window Right' })
 
 --{{{ tabs
-map('n', '<leader><tab><tab>', '<cmd>tabnew<cr>', { desc = 'New Tab', silent = true })
-map('n', '<leader><tab>n', '<cmd>tabnew<cr>', { desc = 'New Tab', silent = true })
+map('n', '<leader><tab><tab>', '<cmd>tabnew<cr>', { desc = 'New Tab' })
+map('n', '<leader><tab>n', '<cmd>tabnew<cr>', { desc = 'New Tab' })
 
-map('n', '<leader><tab>0', '<cmd>tabfirst<cr>', { desc = 'Go to First Tab', silent = true })
-map('n', '<leader><tab>$', '<cmd>tablast<cr>', { desc = 'Go to Last Tab', silent = true })
+map('n', '<leader><tab>0', '<cmd>tabfirst<cr>', { desc = 'Go to First Tab' })
+map('n', '<leader><tab>$', '<cmd>tablast<cr>', { desc = 'Go to Last Tab' })
 
-map('n', '<leader><tab>]', '<cmd>tabnext<cr>', { desc = 'Next Tab', silent = true })
-map('n', '<leader><tab>[', '<cmd>tabprevious<cr>', { desc = 'Previous Tab', silent = true })
-map('n', '<leader><tab>l', '<cmd>tabnext<cr>', { desc = 'Next Tab', silent = true })
-map('n', '<leader><tab>h', '<cmd>tabprevious<cr>', { desc = 'Previous Tab', silent = true })
+map('n', '<leader><tab>]', '<cmd>tabnext<cr>', { desc = 'Next Tab' })
+map('n', '<leader><tab>[', '<cmd>tabprevious<cr>', { desc = 'Previous Tab' })
+map('n', '<leader><tab>l', '<cmd>tabnext<cr>', { desc = 'Next Tab' })
+map('n', '<leader><tab>h', '<cmd>tabprevious<cr>', { desc = 'Previous Tab' })
 
-map('n', '<leader><tab>0', '<cmd>0tabmove<cr>', { desc = 'Move Tab to the First', silent = true })
-map('n', '<leader><tab>$', '<cmd>$tabmove<cr>', { desc = 'Move Tab to the Last', silent = true })
+map('n', '<leader><tab>0', '<cmd>0tabmove<cr>', { desc = 'Move Tab to the First' })
+map('n', '<leader><tab>$', '<cmd>$tabmove<cr>', { desc = 'Move Tab to the Last' })
 
-map('n', '<leader><tab>k', '<cmd>+tabmove<cr>', { desc = 'Move Tab to the Right', silent = true })
-map('n', '<leader><tab>j', '<cmd>-tabmove<cr>', { desc = 'Move Tab to the Left', silent = true })
+map('n', '<leader><tab>k', '<cmd>+tabmove<cr>', { desc = 'Move Tab to the Right' })
+map('n', '<leader><tab>j', '<cmd>-tabmove<cr>', { desc = 'Move Tab to the Left' })
 
-map('n', '<leader><tab>D', '<cmd>tabonly<cr>', { desc = 'Close Other Tabs', silent = true })
-map('n', '<leader><tab>d', '<cmd>tabclose<cr>', { desc = 'Close Tab', silent = true })
+map('n', '<leader><tab>D', '<cmd>tabonly<cr>', { desc = 'Close Other Tabs' })
+map('n', '<leader><tab>d', '<cmd>tabclose<cr>', { desc = 'Close Tab' })
 
 for i = 1, 9 do
-  map('n', '<leader><tab>' .. i, '<cmd>silent! tabnext ' .. i .. '<cr>', { desc = 'Go to Tab ' .. i, silent = true })
-  map('n', '<a-' .. i .. '>', '<cmd>silent! tabnext ' .. i .. '<cr>', { desc = 'Go to Tab ' .. i, silent = true })
+  map('n', '<leader><tab>' .. i, '<cmd>silent! tabnext ' .. i .. '<cr>', { desc = 'Go to Tab ' .. i })
+  map('n', '<a-' .. i .. '>', '<cmd>silent! tabnext ' .. i .. '<cr>', { desc = 'Go to Tab ' .. i })
 end
 --}}}
