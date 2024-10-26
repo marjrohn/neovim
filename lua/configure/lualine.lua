@@ -1,8 +1,11 @@
 local opts = {}
 local icons = require('icons')
 
-local section_b_cond = function()
-  return vim.o.columns >= 100
+local section_b_cond = {}
+for _, nr in ipairs({ 96, 128 }) do
+  table.insert(section_b_cond, function()
+    return vim.o.columns >= nr and vim.bo.filetype ~= 'help'
+  end)
 end
 
 vim.opt.showmode = false
@@ -28,7 +31,7 @@ opts.sections.lualine_a = {
   },
 }
 opts.sections.lualine_b = {
-  { 'branch', icon = icons.git.branch, cond = section_b_cond },
+  { 'branch', icon = icons.git.branch, cond = section_b_cond[1] },
   {
     'diff',
     symbols = {
@@ -37,13 +40,14 @@ opts.sections.lualine_b = {
       removed = icons.git.diff.removed .. ' ',
     },
     padding = { left = 0, right = 1 },
-    cond = section_b_cond,
+    cond = section_b_cond[2],
   },
 }
 opts.sections.lualine_c = {
   { '%=', padding = 0 },
   {
     'datetime',
+    icon = icons.clock,
     style = '%H:%M',
     separator = { left = '', right = '' },
     padding = 0,
@@ -64,9 +68,15 @@ opts.sections.lualine_y = {
     fmt = function(name)
       return string.upper(name)
     end,
-    cond = section_b_cond,
+    cond = section_b_cond[1],
   },
-  { 'encoding', cond = section_b_cond },
+  {
+    function()
+      return vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
+    end,
+    icon = { icons.directory, color = 'Directory' },
+    cond = section_b_cond[2],
+  },
 }
 opts.sections.lualine_z = {
   {

@@ -8,9 +8,9 @@ vim.cmd.colorscheme('rose-pine-main')
 local palette = require('rose-pine.palette')
 
 local modes = {
-  normal = palette.rose,
+  normal = palette.iris,
   insert = palette.foam,
-  visual = palette.iris,
+  visual = palette.rose,
   replace = palette.pine,
   command = palette.love,
   inactive = palette.overlay,
@@ -37,5 +37,6 @@ end
 
 vim.g.lualine_theme = theme
 
-vim.cmd.highlight('CursorLineNr guifg=' .. palette.gold)
 vim.cmd.highlight('Identifier guifg=' .. palette.love)
+vim.cmd.highlight('CursorLineNr guifg=' .. palette.gold)
+vim.cmd.highlight('FoldColumnScope cterm=bold gui=bold guifg=' .. palette.rose)

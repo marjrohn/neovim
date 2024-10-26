@@ -4,10 +4,9 @@ return {
 
   { -- better text-objects
     'echasnovski/mini.ai',
-    event = 'VeryLazy',
     dependencies = 'nvim-treesitter/nvim-treesitter-textobjects',
     config = function()
-      require('configure.mini.ai')
+      require('configure.mini_ai')
     end,
   },
 
@@ -19,14 +18,6 @@ return {
 
   { 'echasnovski/mini.extra' },
 
-  { -- file management
-    'echasnovski/mini.files',
-    event = 'VeryLazy',
-    config = function()
-      require('configure.mini.files')
-    end,
-  },
-
   -- split/join arguments under cursor
   { 'echasnovski/mini.splitjoin', event = 'VeryLazy', config = true },
 
@@ -35,7 +26,6 @@ return {
 
   { -- show git diff in signcolumn
     'lewis6991/gitsigns.nvim',
-    event = 'VeryLazy',
     config = function()
       require('configure.gitsigns')
     end,
@@ -43,7 +33,6 @@ return {
 
   { -- signcolumn
     'luukvbaal/statuscol.nvim',
-    event = 'UiEnter',
     config = function()
       require('configure.statuscol')
     end,
@@ -51,7 +40,6 @@ return {
 
   { -- tabline
     'nanozuki/tabby.nvim',
-    event = 'UiEnter',
     dependencies = {
       'nvim-tree/nvim-web-devicons',
       'nvim-lualine/lualine.nvim',
@@ -67,7 +55,6 @@ return {
   { -- statusline
     'nvim-lualine/lualine.nvim',
     dependencies = 'nvim-tree/nvim-web-devicons',
-    event = 'UiEnter',
     config = function()
       require('configure.lualine')
     end,

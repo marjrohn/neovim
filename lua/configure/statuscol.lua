@@ -1,48 +1,53 @@
+local opts = {}
 local builtin = require('statuscol.builtin')
 local ffi = require('statuscol.ffidef')
 local foldicons = require('icons').fold
 
-local foldend = nil
-local lastbuf = nil
-local anyfold = nil
+opts.relculright = true
+opts.ft_ignore = { 'oil' }
 
-local cursor_fold = { level = 0, start = -1, foldend = -1 }
-local _win = 0
+local cursor_fold = { level = 0, start = -1, end_ = -1 }
 
-vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI', 'BufWinEnter' }, {
+vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+  group = vim.api.nvim_create_augroup('Statuscol Fold', { clear = false }),
   callback = function(ev)
-    local line = vim.api.nvim_win_get_cursor(_win)[1]
+    if vim.tbl_contains(opts.ft_ignore or {}, vim.bo.filetype) then
+      return
+    end
+
+    if not vim.wo.foldenable or vim.wo.foldcolumn == '0' then
+      return
+    end
+
+    local line = vim.api.nvim_win_get_cursor(0)[1]
     local foldlevel = vim.fn.foldlevel(line)
 
     if foldlevel == 0 then
       cursor_fold.level = 0
       cursor_fold.start = -1
-      cursor_fold.foldend = -1
-    elseif line <= cursor_fold.start or line >= cursor_fold.foldend or foldlevel ~= cursor_fold.level then
+      cursor_fold.end_ = -1
+    elseif line <= cursor_fold.start or line >= cursor_fold.end_ or foldlevel ~= cursor_fold.level then
       cursor_fold.level = foldlevel
 
       local foldstart = vim.fn.foldclosed(line)
       if foldstart ~= -1 then
         cursor_fold.start = foldstart
-        cursor_fold.foldend = vim.fn.foldclosedend(line)
+        cursor_fold.end_ = vim.fn.foldclosedend(line)
       else
         vim.cmd('silent! ' .. line .. 'foldclose')
         cursor_fold.start = vim.fn.foldclosed(line)
-        cursor_fold.foldend = vim.fn.foldclosedend(line)
+        cursor_fold.end_ = vim.fn.foldclosedend(line)
         vim.cmd('silent! ' .. line .. 'foldopen')
       end
     end
   end,
 })
 
-local opts = {}
-
-opts.relculright = true
 opts.segments = {
   {
     text = {
       function(args)
-        local fold_hl = '%#LineNr#'
+        local fold_hl = '%#FoldColumn#'
         local lnum = args.lnum
         local foldinfo = ffi.C.fold_info(args.wp, lnum)
         local next_foldinfo = ffi.C.fold_info(args.wp, lnum + 1)
@@ -51,14 +56,12 @@ opts.segments = {
         local next_foldlevel = next_foldinfo.level
         local next_foldstart = next_foldinfo.start
 
-        _win = args.win
-
         if foldlevel == 0 then
           return ''
         end
 
-        if lnum >= cursor_fold.start and lnum <= cursor_fold.foldend then
-          fold_hl = '%#CursorLineNr#'
+        if lnum >= cursor_fold.start and lnum <= cursor_fold.end_ then
+          fold_hl = '%#FoldColumnScope#'
         end
 
         if foldinfo.lines > 0 then
@@ -66,14 +69,18 @@ opts.segments = {
         end
 
         if lnum == foldstart then
-          return fold_hl .. (foldlevel == 1 and foldicons.open or foldicons.divider)
+          return fold_hl .. (foldlevel == 1 and foldicons.open or foldicons.scopestart)
         end
 
         -- end of fold
-        if
-          not (foldlevel == next_foldlevel and foldstart == next_foldstart) and (foldlevel == 1 and next_foldlevel <= 1)
-        then
-          return fold_hl .. foldicons.foldend
+        local a = foldlevel ~= next_foldlevel
+        local b = foldstart < next_foldstart
+        if (a or b) and not (a and b) then
+          if foldlevel == 1 and next_foldlevel <= 1 then
+            return fold_hl .. foldicons.end_
+          end
+
+          return fold_hl .. foldicons.scopeend
         end
 
         return fold_hl .. foldicons.scope
@@ -81,17 +88,7 @@ opts.segments = {
     },
     condition = {
       function(args)
-        if (not vim.wo.foldenable) or vim.wo.foldcolumn == '0' then
-          return false
-        end
-
-        if (not anyfold) or (args.buf ~= lastbuf) then
-          local foldinfo = ffi.C.fold_info(args.wp, args.lnum)
-          lastbuf = args.buf
-          anyfold = foldinfo.level > 0
-        end
-
-        return anyfold
+        return vim.wo.foldenable and vim.wo.foldcolumn ~= '0'
       end,
     },
     sign = { colwidth = 2 },

@@ -3,12 +3,16 @@ local M = {
   neovim = '',
 }
 
+M.clock = ''
+M.directory = ''
+
 M.fold = {
-  open    = '╭',
-  close   = '╴',
-  scope   = '│ ',
-  divider = '├',
-  foldend = '╰╼',
+  open = '',
+  end_ = '╼',
+  close = '╴',
+  scope = '│ ',
+  scopestart = '',
+  scopeend = '╴',
 }
 
 M.git = {
