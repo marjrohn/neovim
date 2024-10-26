@@ -33,4 +33,22 @@ M.get_mode_for_theme = function()
   return 'normal'
 end
 
+M.mapping = function(mode, lhs, rhs, opts)
+  opts = opts or {}
+
+  if opts.silent == nil then
+    opts.silent = true
+  end
+
+  if opts.noremap == nil then
+    opts.noremap = true
+  end
+
+  if opts.remap then
+    opts.noremap = false
+  end
+
+  vim.keymap.set(mode, lhs, rhs, opts)
+end
+
 return M

@@ -1,16 +1,6 @@
 -- [[ Genral Keymappings ]]
 
-local map = function(mode, lhs, rhs, opts)
-  opts = opts or {}
-
-  if opts.silent == nil then
-    opts.silent = true
-  end
-
-  opts.noremap = not opts.remap
-
-  vim.keymap.set(mode, lhs, rhs, opts)
-end
+local map = require('utils').mapping
 
 if vim.g.mapleader == ' ' then
   map('n', '<space>', '<nop>')

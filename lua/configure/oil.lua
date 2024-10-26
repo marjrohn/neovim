@@ -2,7 +2,6 @@ local oil = require('oil')
 opts = {}
 
 opts.delete_to_trash = true
-opts.skip_confirm_for_simple_edits = true
 opts.lsp_file_methods = { autosave_changes = true }
 opts.keymaps = {
   ['<c-j>'] = 'actions.preview_scroll_down',

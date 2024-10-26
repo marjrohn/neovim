@@ -24,6 +24,14 @@ return {
   -- surrounding
   { 'echasnovski/mini.surround', event = 'VeryLazy', config = true },
 
+  { -- folding
+    'kevinhwang91/nvim-ufo',
+    dependencies = 'kevinhwang91/promise-async',
+    config = function()
+      require('configure.ufo')
+    end,
+  },
+
   { -- show git diff in signcolumn
     'lewis6991/gitsigns.nvim',
     config = function()

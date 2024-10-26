@@ -5,6 +5,7 @@ local M = {
 
 M.clock = ''
 M.directory = ''
+M.dots = ''
 
 M.fold = {
   open = '',

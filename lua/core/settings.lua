@@ -42,12 +42,14 @@ opt.cursorline = true
 opt.expandtab = true
 
 -- remove '~' char for empty lines and change fold chars
-opt.fillchars:append({
-  foldopen = '',
-  foldclose = '',
+opt.fillchars = {
+  foldopen = '',
+  foldclose = '',
+  fold = ' ',
   foldsep = ' ',
+  diff = '╱',
   eob = ' ',
-})
+}
 
 -- folding
 opt.foldenable = true
