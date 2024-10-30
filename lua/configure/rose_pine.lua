@@ -39,6 +39,5 @@ vim.g.lualine_theme = theme
 
 vim.cmd.highlight('Identifier guifg=' .. palette.love)
 vim.cmd.highlight('CursorLineNr guifg=' .. palette.gold)
-vim.cmd.highlight('Folded guibg=' .. palette.highlight_med)
 vim.cmd.highlight('FoldedSuffix guifg=' .. palette.love)
 vim.cmd.highlight('FoldColumnScope cterm=bold gui=bold guifg=' .. palette.rose)

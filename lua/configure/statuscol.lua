@@ -57,7 +57,7 @@ opts.segments = {
         local next_foldstart = next_foldinfo.start
 
         if foldlevel == 0 then
-          return ''
+          return '  ' -- 2 spaces
         end
 
         if lnum >= cursor_fold.start and lnum <= cursor_fold.end_ then
@@ -91,7 +91,6 @@ opts.segments = {
         return vim.wo.foldenable and vim.wo.foldcolumn ~= '0'
       end,
     },
-    sign = { colwidth = 2 },
     click = 'v:lua.ScFa',
   },
 

@@ -2,7 +2,7 @@ local opts = {}
 local icons = require('icons')
 
 local section_b_cond = {}
-for _, nr in ipairs({ 96, 128 }) do
+for _, nr in ipairs({ 106, 128 }) do
   table.insert(section_b_cond, function()
     return vim.o.columns >= nr and vim.bo.filetype ~= 'help'
   end)

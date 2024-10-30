@@ -157,7 +157,14 @@ map('n', 'gcA', function()
   return '<cmd>normal gcc^"-dW<cr>A <esc>"-Pa'
 end, { desc = 'Add Comment to End', expr = true })
 
--- quit
+-- add a new line below/above the cursor
+map('n', ']<leader>', ':normal! m`o<esc>``', { desc = 'Add new Line Below' })
+map('n', '[<leader>', ':normal! m`O<esc>``', { desc = 'Add New Line Above' })
+
+-- delete contents of the current line
+map('n', 'd<leader>', '<cmd>normal! 0d$<cr>', { desc = 'Clear Current Line' })
+
+-- quitting
 map('n', '<leader>q', '<cmd>confirm q<cr>', { desc = 'Quit' })
 map('n', '<leader>Q', '<cmd>confirm qall<cr>', { desc = 'Exit Neovim' })
 
@@ -199,24 +206,7 @@ map('n', ']b', '<cmd>bnext<cr>', { desc = 'Next Buffer' })
 map('n', '<leader>bn', '<cmd>enew<cr>', { desc = 'New Buffer' })
 map('n', '<leader>bb', '<cmd>edit #<cr>', { desc = 'Switch to Other Buffer' })
 map('n', '<leader>bD', '<cmd>:bdelete<cr>', { desc = 'Delete Buffer and Window' })
-map('n', '<leader>bd', function()
-  if
-    #vim
-      .iter(vim.api.nvim_list_bufs())
-      :filter(function(buf)
-        return vim.fn.buflisted(buf) == 1
-      end)
-      :totable() == 1
-  then
-    if vim.fn.bufname() ~= '' then
-      vim.cmd([[enew]])
-      vim.cmd([[confirm bdelete #]])
-    end
-  else
-    vim.cmd([[bprevious]])
-    vim.cmd([[confirm bdelete #]])
-  end
-end, { desc = 'Delete Buffer' })
+map('n', '<leader>bd', require('utils').buf_remove, { desc = 'Delete Buffer' })
 --}}}
 
 -- windows
