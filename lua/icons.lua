@@ -8,12 +8,12 @@ M.directory = ''
 M.dots = ''
 
 M.fold = {
-  open = '',
-  end_ = '╼',
+  open = '╭',
+  end_ = '╰╼',
   close = '╴',
   scope = '│ ',
-  scopestart = '',
-  scopeend = '╴',
+  scopestart = '├',
+  scopeend = '├ ',
 }
 
 M.git = {

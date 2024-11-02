@@ -13,6 +13,11 @@ opts.ensure_installed = {
   'printf',
   'query',
   'regex',
+  'markdown',
+  'markdown_inline',
+  'json',
+  'toml',
+  'html',
 }
 opts.sync_install = true
 opts.incremental_selection = { enable = true }
@@ -42,6 +47,7 @@ opts.textobjects.move.goto_next_end = {
   [']C'] = '@class.outer',
   [']A'] = '@parameter.inner',
 }
+
 opts.textobjects.move.goto_previous_start = {
   ['[f'] = '@function.outer',
   ['[c'] = '@class.outer',

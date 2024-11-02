@@ -1,5 +1,9 @@
 local builtin = require('telescope.builtin')
 local map = require('utils').mapping
+local autocmd = vim.api.nvim_create_autocmd
+local augroup = function(name)
+  return vim.api.nvim_create_augroup(name, { clear = true })
+end
 
 local command = function(name, opts)
   return function()
@@ -78,4 +82,29 @@ map('n', '<leader>gC', command('git_bcommits', { use_file_path = true }), { desc
 map('n', '<leader>gs', command('git_status', { use_file_path = true }), { desc = 'Git Status' })
 ---
 
-map('n', '<leader>ld', command('diagnostics'), { desc = 'Find Diagnostics' })
+--- LSP
+autocmd('LspAttach', {
+  group = augroup('telescope_lsp'),
+  callback = function(event)
+    -- Jump to the definition of the word under your cursor.
+    map('n', '<leader>ld', command('lsp_definitions'), { desc = 'Goto To Definition', buffer = event.buf })
+
+    -- Find references for the word under your cursor.
+    map('n', '<leader>lr', command('lsp_references'), { desc = 'Goto References', buffer = event.buf })
+
+    -- Jump to the implementation of the word under your cursor.
+    map('n', '<leader>li', command('lsp_implementations'), { desc = 'Goto Implementation', buffer = event.buf })
+
+    -- Jump to the type of the word under your cursor.
+    map('n', '<leader>ltd', command('lsp_type_definitions'), { desc = 'Type Definition', buffer = event.buf })
+
+    -- Fuzzy find all the symbols in your current document.
+    map('n', '<leader>ls', command('lsp_document_symbols'), { desc = 'Document Symbols', buffer = event.buf })
+
+    -- Fuzzy find all the symbols in your current workspace.
+    map('n', '<leader>lw', command('lsp_dynamic_workspace_symbols'), { desc = 'Workspace Symbols', buffer = event.buf })
+  end,
+})
+
+map('n', '<leader>lD', command('diagnostics'), { desc = 'Find Diagnostics' })
+---
