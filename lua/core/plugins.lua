@@ -1,6 +1,6 @@
 return {
   -- show marks in signcolumn
-  { 'chentoast/marks.nvim', event = 'VeryLazy', config = true },
+  { 'chentoast/marks.nvim', config = true },
 
   { -- better text-objects
     'echasnovski/mini.ai',
@@ -11,18 +11,18 @@ return {
   },
 
   -- text alignment
-  { 'echasnovski/mini.align', event = 'VeryLazy', config = true },
+  { 'echasnovski/mini.align', config = true },
 
   --  highlight word under cursor
-  { 'echasnovski/mini.cursorword' },
+  { 'echasnovski/mini.cursorword', config = true },
 
   { 'echasnovski/mini.extra' },
 
   -- split/join arguments under cursor
-  { 'echasnovski/mini.splitjoin', event = 'VeryLazy', config = true },
+  { 'echasnovski/mini.splitjoin', config = true },
 
   -- surrounding
-  { 'echasnovski/mini.surround', event = 'VeryLazy', config = true },
+  { 'echasnovski/mini.surround', config = true },
 
   { -- folding
     'kevinhwang91/nvim-ufo',
@@ -58,7 +58,7 @@ return {
   },
 
   -- highlight color
-  { 'NvChad/nvim-colorizer.lua', event = 'VeryLazy', config = true },
+  { 'NvChad/nvim-colorizer.lua', config = true },
 
   { -- statusline
     'nvim-lualine/lualine.nvim',
@@ -74,7 +74,6 @@ return {
       'nvim-lua/plenary.nvim',
       { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     },
-    cmd = 'Telescope',
     config = function()
       require('configure.telescope')
     end,
@@ -95,7 +94,6 @@ return {
 
   { -- notifications
     'rcarriga/nvim-notify',
-    event = 'VeryLazy',
     config = function()
       require('configure.notify')
     end,

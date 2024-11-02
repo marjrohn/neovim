@@ -6,7 +6,7 @@ lazy.setup({
   defaults = { lazy = false, version = false },
   install = {
     -- colorscheme used when installed plugins
-    colorscheme = { 'rose-pine', vim.g.default_coloscheme, 'habamax' },
+    colorscheme = { 'rose-pine', 'sorbet' },
   },
   -- automatically check for plugins update
   checker = {

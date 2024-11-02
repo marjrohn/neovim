@@ -4,7 +4,7 @@ local g = vim.g
 local opt = vim.opt
 
 -- colorscheme (builtin)
-g.default_colorscheme = 'sorbet'
+vim.cmd.colorscheme('sorbet')
 
 -- set leader to space key
 g.mapleader = ' '
@@ -58,6 +58,9 @@ opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 opt.foldcolumn = '1'
 opt.foldlevel = 99
 opt.foldlevelstart = 99
+
+-- dont open a closed fold with horizontal movements
+opt.foldopen:remove('hor')
 
 -- preview substituition live as you type
 opt.inccommand = 'split'
@@ -160,6 +163,9 @@ opt.virtualedit = 'block'
 
 -- completion mode
 opt.wildmode = { 'longest:full', 'full' }
+
+-- make float windows transparents
+opt.winblend = 12
 
 -- minimum window width
 opt.winminwidth = 8

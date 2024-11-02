@@ -3,7 +3,7 @@ local builtin = require('statuscol.builtin')
 local ffi = require('statuscol.ffidef')
 local foldicons = require('icons').fold
 
-opts.relculright = true
+-- opts.relculright = true
 opts.ft_ignore = { 'oil' }
 
 local cursor_fold = { level = 0, start = -1, end_ = -1 }
@@ -26,7 +26,7 @@ vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
       cursor_fold.level = 0
       cursor_fold.start = -1
       cursor_fold.end_ = -1
-    elseif line <= cursor_fold.start or line >= cursor_fold.end_ or foldlevel ~= cursor_fold.level then
+    elseif line < cursor_fold.start or line > cursor_fold.end_ or foldlevel ~= cursor_fold.level then
       cursor_fold.level = foldlevel
 
       local foldstart = vim.fn.foldclosed(line)
@@ -43,6 +43,20 @@ vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
   end,
 })
 
+local fold_has_level = function(args)
+  if not vim.wo.foldenable or vim.wo.foldcolumn == '0' then
+    return false
+  end
+
+  local foldlevel = ffi.C.fold_info(args.wp, args.lnum).level
+
+  return foldlevel > 0
+end
+
+local fold_not_has_level = function(args)
+  return not fold_has_level(args)
+end
+
 opts.segments = {
   {
     text = {
@@ -55,10 +69,6 @@ opts.segments = {
         local foldstart = foldinfo.start
         local next_foldlevel = next_foldinfo.level
         local next_foldstart = next_foldinfo.start
-
-        if foldlevel == 0 then
-          return '  ' -- 2 spaces
-        end
 
         if lnum >= cursor_fold.start and lnum <= cursor_fold.end_ then
           fold_hl = '%#FoldColumnScope#'
@@ -86,11 +96,7 @@ opts.segments = {
         return fold_hl .. foldicons.scope
       end,
     },
-    condition = {
-      function(args)
-        return vim.wo.foldenable and vim.wo.foldcolumn ~= '0'
-      end,
-    },
+    condition = { fold_has_level },
     click = 'v:lua.ScFa',
   },
 
@@ -114,7 +120,8 @@ opts.segments = {
   },
 
   {
-    text = { builtin.lnumfunc },
+    text = { '  ', builtin.lnumfunc },
+    condition = { fold_not_has_level, true },
     click = 'v:lua.ScLa',
   },
 

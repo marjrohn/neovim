@@ -47,4 +47,4 @@ opts.custom_textobjects.i = gen_ai_spec.indent()
 opts.custom_textobjects.d = gen_ai_spec.number()
 ---
 
-ai.setup()
+ai.setup(opts)

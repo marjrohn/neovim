@@ -142,3 +142,11 @@ autocmd({ 'BufWritePre' }, {
     vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
   end,
 })
+
+-- dont insert comment leader when add a new line with 'o' or 'O'
+autocmd('FileType', {
+  group = augroup('no_auto_comment'),
+  callback = function(event)
+    vim.opt_local.formatoptions:remove('o')
+  end,
+})
